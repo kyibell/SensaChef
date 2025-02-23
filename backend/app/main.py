@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.orm import Session
 
-from database import Base, engine, SessionLocal
+from backend.app.database import Base, engine, SessionLocal
 
 # Define our model
 class UserModel(Base):
