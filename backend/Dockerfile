@@ -12,16 +12,16 @@ WORKDIR /app
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
 
 # Copy the requirements file into the container.
-COPY requirements.txt .
+COPY requirements.txt /app/
 
 # Upgrade pip and install the Python dependencies.
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
 # Copy the rest of your application code.
-COPY . .
+COPY . /app/
 
 # Expose port 8000 for the app.
 EXPOSE 8000
 
 # Start the FastAPI app with Uvicorn.
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

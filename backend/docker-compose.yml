@@ -1,28 +1,11 @@
-version: '3.8'
-
 services:
   fastapi:
     build: .
     container_name: fastapi_app
     ports:
       - "8000:8000"
-    depends_on:
-      - postgres_db
     environment:
       # Pass the DATABASE_URL to the FastAPI container
-      - DATABASE_URL=postgresql://admin:secret@postgres_db/mydatabase
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_ANON_KEY}
 
-  postgres_db:
-    image: postgres:15
-    container_name: postgres_db
-    environment:
-      POSTGRES_USER: admin
-      POSTGRES_PASSWORD: secret
-      POSTGRES_DB: mydatabase
-    ports:
-      - "5432:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-
-volumes:
-  postgres_data:
