@@ -24,3 +24,16 @@ class Text(BaseModel):
     output_format: str
 
 
+#synthesize speech
+@router.post("/tts")
+async def get_audio(text: Text):
+    client = boto3.client('polly', aws_access_key_id=AWS_AK, aws_secret_access_key=AWS_SAK, region_name='us-east-1')
+    result = client.synthesize_speech(Text=text.content, OutputFormat=text.output_format, VoiceId='Joanna')
+    audio = result['AudioStream'].read()
+
+    with open('audio.mp3', 'wb') as file:
+        file.write(audio)
+    return {"message": text.content}
+
+if __name__ == "__main__":
+    uvicorn.run("tts:app", host="0.0.0.0", port=8080, reload=True)
