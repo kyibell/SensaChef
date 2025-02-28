@@ -1,9 +1,10 @@
 from fastapi import FastAPI
 from pydantic import BaseModel
 from app.database import supabase
-
+from .routers import object_detection
 app = FastAPI()
 
+app.include_router(object_detection.router)
 # Pydantic model for request validation
 class User(BaseModel):
     name: str
