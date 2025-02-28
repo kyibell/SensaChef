@@ -11,7 +11,7 @@ import json
 model = models.densenet121(pretrained=True)
 model.eval()
 
- #imagenet classes for model
+#imagenet classes for model
 imagenet_class_index = json.load(open('./static/imagenet_class_index.json'))
 
 def transform_image(image_bytes):
@@ -34,15 +34,14 @@ def get_prediction(image_bytes):
 def get_result(image_file):
     image_bytes = image_file.file.read()
     class_id, class_name = get_prediction(image_bytes)
-    print(class_id, class_name)
-    return {"message": "Hello from detect food"}
-   # return {
-      #  "message": "Hello from detect food",
-     #   "predictions":{
-     #       "class_id": class_id,
-      #      "class_name": class_name
-      #  }
-   # }
+    return {
+        "message": "Hello from detect food",
+        "predictions":{
+           "class_id": class_id,
+            "class_name": class_name
+        }
+   }
+   
 # Import the Router to Create the Routes
 router = APIRouter()
 

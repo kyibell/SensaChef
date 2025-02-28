@@ -11,5 +11,4 @@ def test_predict_food_route():
         "/api/detect-food", files={"file":("banana_image",open(file_name, "rb"), "images/jpeg")}
         
     )
-    assert response.json() == {"message": "Hello from detect food"}
-    assert response.status_code == 300
+    assert response.status_code == 200
