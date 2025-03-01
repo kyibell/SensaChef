@@ -1,0 +1,19 @@
+services:
+  backend:
+    build:
+      context: ./backend      # Points to the backend folder
+      dockerfile: Dockerfile    
+    container_name: backend_app
+    ports:
+      - "8000:8000"
+    environment:
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_KEY=${SUPABASE_ANON_KEY}
+
+  frontend:
+    build:
+      context: ./frontend     # Points to the frontend folder
+      dockerfile: Dockerfile   
+    container_name: frontend_app
+    ports:
+      - "3000:3000"           
