@@ -46,6 +46,26 @@ const useSpeechToText = (options) => {
         }
     }, [])
 
+    const startListening = () => {
+        if(recognitionRef.current && !isListening) {
+            recognitionRef.current.start()
+            setIsListening(true)
+        }
+    }
+
+    const stopListening = () => {
+        if(recognitionRef.current && isListening) {
+            recognitionRef.current.stop()
+            setIsListening(false)
+        }
+    }
+
+    return {
+        isListening,
+        transcript,
+        startListening,
+        stopListening
+    }
 }
 
 export default useSpeechToText  
