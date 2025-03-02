@@ -20,11 +20,11 @@ const TextToSpeech = () => {
     };
 
     return (
-        <div>
+        <div style={{display:'block', margin: '0 auto', width:'400px', textAlign:'center', marginTop:'200px'}}>
             <h1>Text to Speech</h1>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter text to speak..." rows="4" cols="50"/>
             <br />
-            <button onClick={speak}>Speak</button>
+            <button onClick={speak} style={{backgroundColor: "brown", color: "white", padding: "10px 20px"}}>Speak</button>
         </div>
     );
 }
