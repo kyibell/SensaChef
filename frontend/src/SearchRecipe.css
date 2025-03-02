@@ -1,0 +1,62 @@
+.search-recipe-container {
+  text-align: center;
+  position: relative;
+}
+
+.search-button {
+  background: #c57e00;
+  color: white;
+  font-size: 18px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.search-button:hover {
+  background: #a86900;
+}
+
+/* Make the input field appear near the button */
+.search-box {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.results {
+  margin-top: 20px;
+}
+
+.recipe-item {
+  background: #f4f4f4;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  display: inline-block;
+}
