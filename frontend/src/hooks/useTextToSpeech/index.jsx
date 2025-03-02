@@ -10,6 +10,14 @@ const textToSpeech = () => {
             const enUSVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US')
             setVoice(enUSVoice)
         };
-        
-    })
+
+        window.speechSynthesis.onvoiceschanged = loadVoice
+        loadVoice()
+
+        // cleanup
+        return () => {
+            window.speechSynthesis.onvoiceschanged = null
+        }
+    }, []);
+    
 }
