@@ -1,6 +1,7 @@
 import Nav from './navbar.jsx'
 import Content from './Content.jsx';
 import VoiceInput from './stt.jsx';
+import TextToSpeech from './tts.jsx';
 function App() {
     return(
       <>
@@ -9,6 +10,7 @@ function App() {
           <Content />
         </div>
         <VoiceInput />
+        <TextToSpeech />
       </>
     );
 }

@@ -21,7 +21,7 @@ const TextToSpeech = () => {
 
     return (
         <div>
-            <h1>Text to Speech (en-US only)</h1>
+            <h1>Text to Speech</h1>
             <textarea value={text} onChange={(e) => setText(e.target.value)} placeholder="Enter text to speak..." rows="4" cols="50"/>
             <br />
             <button onClick={speak}>Speak</button>
