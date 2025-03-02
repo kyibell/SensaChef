@@ -30,6 +30,10 @@ const useSpeechToText = (options) => {
                 text += event.results[i][0].transcript
             }
             setTranscript(text)
+
+            if (options.commandHandler) {
+                options.commandHandler(text)
+            }
         }
 
         recognition.onerror = (event) => {

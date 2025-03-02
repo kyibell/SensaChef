@@ -1,10 +1,29 @@
 import React, { useState } from 'react'
 import useSpeechToText from './hooks/useSpeechToText';
+import useTextToSpeech from './hooks/useTextToSpeech';
+import TextToSpeech from './tts';
 
 const VoiceInput = () => {
     const [textInput, setTextInput] = useState('');
 
-    const {isListening, transcript, startListening, stopListening} = useSpeechToText({continuous:true})
+    const handleCommand = (transcript) => {
+        // Check if the transcript contains the command "next step"
+        if (transcript.toLowerCase() === "next step") {
+            alert("Moving to the next step!"); // Replace this with your logic
+            // transcript = ""
+            
+        }
+
+        else if (transcript.toLowerCase() === "repeat"){
+            alert("Repeat")
+            
+        }
+    };
+
+    const {isListening, transcript, startListening, stopListening} = useSpeechToText({
+        continuous:true,
+        commandHandler: handleCommand,
+    })
 
     const startStopListening = () => {
         isListening ? stopVoiceInput() : startListening()
