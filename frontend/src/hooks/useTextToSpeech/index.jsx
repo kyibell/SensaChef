@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 
-const textToSpeech = () => {
-    const [text, setText] = useState('')
-    const [voice, setVoice] = useState(null)
+const useTextToSpeech = () => {
+
+    const [enUSVoice, setVoice] = useState(null)
 
     useEffect(() => {
 
@@ -19,5 +19,7 @@ const textToSpeech = () => {
             window.speechSynthesis.onvoiceschanged = null
         }
     }, []);
+    return enUSVoice;
     
 }
+export default useTextToSpeech
