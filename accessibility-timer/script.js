@@ -101,7 +101,7 @@ document.getElementById("setTimeBtn").addEventListener("click", function() {
         statusText.innerText = `Timer set for ${input}`;
         speak(`Timer set for ${input}`);
     } else {
-        statusText.innerText = "Invalid input. Please use a valid time format (e.g. 2m 30s or 1 hour).";
+        statusText.innerText = "Invalid input. Please use a valid time format (e.g. 2 minutes 30 seconds or 1 hour).";
         speak("Invalid input. Please use a valid time format.");
     }
 });
