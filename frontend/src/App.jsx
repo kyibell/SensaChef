@@ -1,5 +1,6 @@
 import Nav from './navbar.jsx'
 import Content from './Content.jsx';
+import SearchRecipe from './SearchRecipe.jsx';
 
 function App() {
     return(
@@ -8,6 +9,7 @@ function App() {
         <div className="content-container">
           <Content />
         </div>
+        <SearchRecipe />
       </>
     );
 }
