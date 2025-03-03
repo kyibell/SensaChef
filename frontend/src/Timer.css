@@ -1,0 +1,62 @@
+.timer-wrapper {
+    margin-top: 200px;
+    background: rgba(0, 4, 8, 0.156);
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.timer-title {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.timer-status {
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: white;
+}
+
+.timer-set-button {
+    background-color: rgb(225, 108, 30);
+    color: white;
+    border-style: none;
+    padding: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.timer-input {
+    text-indent: 5px;
+    border-radius: 10px;
+    border-style: none;
+}
+
+.timer-input-block {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.time-display {
+    font-size: 36px;
+    margin: 15px 0;
+    font-weight: bold;
+    color: white;
+}
+
+.timer-buttons button {
+    padding: 8px 12px;
+    margin: 5px;
+    background-color: rgb(225, 108, 30);
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.timer-buttons button:hover {
+    background-color: darkorange;
+}
