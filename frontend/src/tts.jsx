@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import useTextToSpeech from "./hooks/useTextToSpeech";
 
 const TextToSpeech = ({ text, setText, speak, onUpdate }) => {
 
