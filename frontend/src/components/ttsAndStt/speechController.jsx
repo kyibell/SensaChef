@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import VoiceInput from "./stt";
 import TextToSpeech from "./tts";
 
-function SpeechController(){
+function SpeechController() {
     const [text, setText] = useState("")
 
     const handleUpdate = (newValue) => {
@@ -41,11 +41,11 @@ function SpeechController(){
             alert('Sorry, your browser does not support text to speech!');
         }
     }
-    
+
     return (
         <>
-            <VoiceInput repeatText={text} onRepeat={repeat}/>
-            <TextToSpeech text={text} setText={setText} speak={speak} onUpdate={handleUpdate}/>
+            <VoiceInput repeatText={text} onRepeat={repeat} />
+            <TextToSpeech text={text} setText={setText} speak={speak} onUpdate={handleUpdate} />
         </>
     )
 }
