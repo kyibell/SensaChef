@@ -1,7 +1,7 @@
 import Nav from './navbar.jsx'
 import Content from './Content.jsx';
-import VoiceInput from './stt.jsx';
-import TextToSpeech from './tts.jsx';
+import SpeechController from './speechController.jsx';
+
 function App() {
     return(
       <>
@@ -9,8 +9,7 @@ function App() {
         <div className="content-container">
           <Content />
         </div>
-        <VoiceInput />
-        <TextToSpeech />
+        <SpeechController />
       </>
     );
 }
