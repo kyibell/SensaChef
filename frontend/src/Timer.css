@@ -1,10 +1,12 @@
 .timer-wrapper {
-    margin-top: 200px;
     background: rgba(0, 4, 8, 0.156);
     padding: 20px;
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
     text-align: center;
+    width: 500px;
+    margin: 0 auto;
+    margin-top: 50px;
 }
 
 .timer-title {

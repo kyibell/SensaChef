@@ -8,13 +8,13 @@ const TextToSpeech = ({ text, setText, speak, onUpdate }) => {
     }
     
     return (
-        <div style={{display:'block', margin: '0 auto', width:'400px', textAlign:'center', marginTop:'200px'}}>
+        <div className="speech-section">
             <h1>Text to Speech</h1>
-            <textarea value={text} onChange={handleChange} placeholder="Enter text to speak..." rows="4" cols="50"/>
-            <br />
-            <button onClick={speak} style={{backgroundColor: "brown", color: "white", padding: "10px 20px"}}>Speak</button>
+            <textarea value={text} onChange={handleChange} />
+            <button onClick={speak}>Speak</button>
         </div>
     );
+    
 }
 
 export default TextToSpeech

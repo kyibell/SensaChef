@@ -58,7 +58,9 @@ body {
 	width: 100%;
 }
 .content-container {
-	margin-top: 90px;
+	margin-top: 40px;
+	display: flex;
+	flex-direction: column;
 }
 .button-container {
 	display: flex;
@@ -87,14 +89,14 @@ body {
 
 .search-box {
     display: flex;
-    flex-direction: column;  /* Stack input and button vertically if needed */
-    align-items: center;     /* Center under button */
+    flex-direction: column;
+    align-items: center; 
     gap: 8px;
     margin-top: 50px;
 }
 .search-box input {
     padding: 8px;
-    width: 250px; /* Optional fixed width */
+    width: 250px;
     border-radius: 8px;
     outline: none;
     border-style: none;
