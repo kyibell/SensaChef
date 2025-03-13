@@ -1,10 +1,11 @@
 import Nav from "../components/Navigation/navbar";
+import LoginUI from "../components/LoginUI/LoginUI";
 
 function Login() {
     return(
         <>
             <Nav />
-            <h1>This is Login page</h1>
+            <LoginUI />
         </>
     );
 }

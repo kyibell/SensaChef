@@ -3,6 +3,8 @@ import Home from './Pages/Home';
 import SignUp from './Pages/Sign-up';
 import CookingMode from './Pages/CookingMode';
 import Login from './Pages/Login';
+import LoginUI from './components/LoginUI/LoginUI';
+
 
 function App() {
 	return (
