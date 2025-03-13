@@ -1,0 +1,18 @@
+import { useNavigate } from "react-router-dom";
+import Nav from "../components/Navigation/navbar";
+
+
+function Home() {
+
+    const navigate = useNavigate();
+
+    return(
+        <>
+            <Nav />
+            <h1>This is the home page</h1>
+            <button onClick={() => navigate('/cookingmode')} >Click to go into cooking mode</button>
+        </>
+    );
+}
+
+export default Home

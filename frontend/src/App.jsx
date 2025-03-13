@@ -1,23 +1,21 @@
-import Nav from "./navbar.jsx";
-import Content from "./Content.jsx";
-import Timer from "./Timer.jsx";
-import SpeechController from "./components/ttsAndStt/speechController.jsx";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import Home from './Pages/Home';
+import SignUp from './Pages/Sign-up';
+import CookingMode from './Pages/CookingMode';
+import Login from './Pages/Login';
 
 function App() {
 	return (
 		<>
-			<Nav />
-			<div className="content-container">
-				<div>
-					<Content />
-				</div>
-        <div className="Speech-container">
-					<SpeechController />
-				</div>
-				<div className="Timer-container">
-					<Timer />
-				</div>
-			</div>
+			<BrowserRouter>
+				<Routes>
+					<Route path="/" element={<Navigate to="/home" replace />} />
+					<Route path="/home" element={<Home />} />
+					<Route path="/login" element={<Login />} />
+					<Route path="/signup" element={<SignUp />} />
+					<Route path="/cookingmode" element={<CookingMode />} />
+				</Routes>
+			</BrowserRouter>
 		</>
 	);
 }
