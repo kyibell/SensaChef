@@ -1,0 +1,131 @@
+.signup-page {
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.signup-container {
+    border-style: none;
+    border-radius: 10px;
+    width: 450px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    background: rgba(0, 4, 8, 0.156);
+}
+.signup-title {
+    display: flex;
+    justify-content: center;
+}
+.signup-title-h1 {
+    color: white;
+    font-weight: normal;
+}
+.signup-hr {
+    margin: 0px auto;
+    width: 400px;
+    border: 1px solid white;
+    margin-top: -15px;
+}
+.signup-FirstName {
+    display: flex;
+    flex-direction: column;
+}
+.signup-FirstName h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-FirstName input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-LastName {
+    display: flex;
+    flex-direction: column;
+}
+.signup-LastName h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-LastName input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-Email {
+    display: flex;
+    flex-direction: column;
+}
+.signup-Email h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-Email input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-Password {
+    display: flex;
+    flex-direction: column;
+}
+.signup-Password h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-Password input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-Password-confirm {
+    display: flex;
+    flex-direction: column;
+}
+.signup-Password-confirm h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-Password-confirm input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-enter-button {
+    display: flex;
+    justify-content: center;
+}
+.signup-enter-button button {
+    padding: 5px;
+    background-color: rgb(225, 108, 30);
+    color: white;
+    border-style: none;
+    padding: 8px;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.signup-enter-button button:hover {
+    background-color: darkorange;
+}

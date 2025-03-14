@@ -1,10 +1,11 @@
 import Nav from "../components/Navigation/navbar";
+import SignupUI from "../components/SignupUI/SignupUI";
 
 function SignUp() {
     return(
         <>
             <Nav />
-            <h1>This is Signup page</h1>
+            <SignupUI />
         </>
     );
 }
