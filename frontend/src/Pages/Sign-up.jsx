@@ -4,7 +4,6 @@ import SignupUI from "../components/SignupUI/SignupUI";
 function SignUp() {
     return(
         <>
-            <Nav />
             <SignupUI />
         </>
     );

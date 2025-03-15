@@ -8,7 +8,6 @@ function Home() {
 
     return(
         <>
-            <Nav />
             <h1>This is the home page</h1>
             <button onClick={() => navigate('/cookingmode')} >Click to go into cooking mode</button>
         </>

@@ -1,4 +1,3 @@
-
 .header {
 	position: fixed;
 	top: 0;
@@ -26,6 +25,7 @@
 	font-weight: 400;
 	text-decoration: none;
 	margin-left: 40px;
+	cursor: pointer;
 }
 
 .navbar a::before {
@@ -40,5 +40,9 @@
 }
 
 .navbar a:hover::before {
+	width: 100%;
+}
+
+.navbar a.active::before {
 	width: 100%;
 }

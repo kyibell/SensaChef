@@ -4,7 +4,6 @@ import LoginUI from "../components/LoginUI/LoginUI";
 function Login() {
     return(
         <>
-            <Nav />
             <LoginUI />
         </>
     );
