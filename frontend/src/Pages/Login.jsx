@@ -1,4 +1,4 @@
-import Nav from "../components/Navigation/navbar";
+import Nav from "../components/Navigation/Navbar.jsx";
 import LoginUI from "../components/LoginUI/LoginUI";
 
 function Login() {

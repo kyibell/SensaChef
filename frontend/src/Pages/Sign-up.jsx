@@ -1,4 +1,4 @@
-import Nav from "../components/Navigation/navbar";
+import Nav from "../components/Navigation/Navbar.jsx";
 import SignupUI from "../components/SignupUI/SignupUI";
 
 function SignUp() {

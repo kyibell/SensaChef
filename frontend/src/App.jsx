@@ -4,7 +4,7 @@ import Home from './Pages/Home';
 import SignUp from './Pages/Sign-up';
 import CookingMode from './Pages/CookingMode';
 import Login from './Pages/Login';
-import Nav from './components/Navigation/navbar';
+import Nav from './components/Navigation/Navbar.jsx';
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
