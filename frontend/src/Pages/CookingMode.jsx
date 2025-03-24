@@ -1,4 +1,4 @@
-import Nav from "../components/Navigation/navbar";
+import Nav from "../components/Navigation/Navbar";
 import Timer from "../components/Timer/Timer";
 
 function CookingMode() {

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "../components/Navigation/navbar";
+import Nav from "../components/Navigation/Navbar";
 
 
 function Home() {
