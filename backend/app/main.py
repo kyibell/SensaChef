@@ -1,30 +1,23 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
 from app.database import supabase
 from .routers import users, object_detection
-
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.include_router(users.router)
 app.include_router(object_detection.router)
+origins = [
+    "http://localhost:3000"
+]
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
-# Pydantic model for request validation
-class User(BaseModel):
-    name: str
-    age: int
-    
 # Test route
 @app.get("/")
 def read_root():
     return {"message": "Hello, world!"}
-
-# Create user route
-@app.post("/users/")
-def create_user(user: User):
-    # Insert user record using Supabase client
-    response = supabase.table("Users").insert({"name": user.name, "age": user.age}).execute()
-    # response.data will contain the inserted row(s) if successful
-    return {
-        "message": f"User {user.name} (age {user.age}) was created!",
-        "data": response.data
-    }
