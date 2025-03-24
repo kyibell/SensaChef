@@ -1,11 +1,14 @@
 from fastapi import APIRouter
 from app.database import supabase
 from pydantic import BaseModel
-
+from datetime import datetime, timezone
 router = APIRouter()
 class userModel(BaseModel):
     name: str
     email: str
+    username: str
+    password: str
+    creationDate: datetime
     
 @router.get("/users", tags=["users"])
 async def read_all_users():
@@ -14,7 +17,7 @@ async def read_all_users():
 
 @router.post("/users", tags=["users"])
 async def create_user(user: userModel):
-    response = supabase.table("users").insert({"name": user.name, "email": user.email}).execute()
+    response = supabase.table("users").insert({"name": user.name, "email": user.email, "username": user.username, "password": user.password, "creationDate": (datetime.now(timezone.utc)).isoformat()}).execute()
     return response.data
 
 @router.post("/users/recipes", tags=["users"])
