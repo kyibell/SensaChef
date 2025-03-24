@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import SearchIcon from './assets/Search.svg';
-import ScanIcon from './assets/Scan.svg';
+import SearchIcon from '../../../assets/Search.svg';
+import '../Buttons.css';
 
-function Content() {
+function SearchButton() {
     const [query, setQuery] = useState("");
     const [results, setResults] = useState([]);
     const [isVisible, setIsVisible] = useState(false);
@@ -25,12 +25,7 @@ function Content() {
     return (
         <div>
             {/* Buttons Section */}
-            <div className="button-container">
-                <button className="buttons">Order Ingredients</button>
-                <button className="buttons">
-                    <img className="scan-icon" src={ScanIcon} alt="Scan" />
-                    Scan Ingredients
-                </button>
+            <div>
                 <button
                     className="buttons"
                     onClick={() => setIsVisible(!isVisible)}
@@ -75,4 +70,4 @@ function Content() {
     );
 }
 
-export default Content;
+export default SearchButton;

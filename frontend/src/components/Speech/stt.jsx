@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react'
-import useSpeechToText from '../../hooks/useSpeechToText';
-import useTextToSpeech from '../../hooks/useTextToSpeech';
+import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
+import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 
 function VoiceInput({ onRepeat, repeatText }) {
     const [textInput, setTextInput] = useState('');
