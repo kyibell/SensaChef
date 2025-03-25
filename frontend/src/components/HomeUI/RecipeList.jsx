@@ -38,7 +38,7 @@ function RecipeList() {
                     <li key={recipe.id}>
                         <h2
                             style={{cursor: 'pointer'}}
-                            onclick={() => navigate(`/cooking-mode/${recipe.id}`)}
+                            onclick={() => navigate(`/cookingmode/${recipe.id}`)}
                             >{recipe['recipe-name']}</h2>
                         <p>{recipe.user_id}</p>
                     </li>
