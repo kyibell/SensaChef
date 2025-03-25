@@ -27,6 +27,21 @@ function RecipeList() {
         fetchRecipes();
     }, []);
 
+    if(loading) return <div>Loading...</div>;
+    if(error) return <div>Errror: {error}</div>;
 
+    return (
+        <div>
+            <h1>Recipes</h1>
+            <ul>
+                {recipes.map((recipe) => (
+                    <li key={recipe.id}>
+                        <h2>{recipe.recipe_name}</h2>
+                        <p>{recipe.user_id}</p>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }
 export default RecipeList
