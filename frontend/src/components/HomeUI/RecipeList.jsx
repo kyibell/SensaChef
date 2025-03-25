@@ -36,7 +36,7 @@ function RecipeList() {
             <ul>
                 {recipes.map((recipe) => (
                     <li key={recipe.id}>
-                        <h2>{recipe.recipe_name}</h2>
+                        <h2>{recipe['recipe-name']}</h2>
                         <p>{recipe.user_id}</p>
                     </li>
                 ))}
