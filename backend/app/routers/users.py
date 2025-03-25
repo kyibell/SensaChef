@@ -15,6 +15,11 @@ async def read_all_users():
     response = supabase.table("users").select("*").execute()
     return response.data
 
+@router.get("/recipes", tags=["recipes"])
+async def get_all_recipes():
+    response = supabase.table("recipes").select("*").execute()
+    return response.data
+
 @router.post("/users", tags=["users"])
 async def create_user(user: userModel):
     response = supabase.table("users").insert({"name": user.name, "email": user.email, "username": user.username, "password": user.password, "creationDate": (datetime.now(timezone.utc)).isoformat()}).execute()
