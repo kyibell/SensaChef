@@ -1,5 +1,8 @@
-from fastapi import APIRouter, Response, render_template
+from fastapi import APIRouter
+from fastapi.responses import StreamingResponse
+# from fastapi.templating import Jinja2Templates
 import cv2 # OpenCV import
+import logging
 
 """
 Any string with b'' is a byte string. Indicates that the string is a sequence of bytes and not unicode chracters.
@@ -25,30 +28,34 @@ router = APIRouter()
 class Camera:
     def __init__(self):
         self.video = cv2.VideoCapture(0) # 0 for webcam access
+        if not self.video.isOpened():
+            raise RuntimeError("Camera could not be opened.")
     def __del__(self):
-        self.video.release() # For Deleting the video/stopping the streaming
+        if self.video.isOpened():
+            self.video.release() # For Deleting the video/stopping the streaming
     def get_frames(self): # Reading the video to return the frames
         ret, frame = self.video.read() # ret = return 
         if not ret: # If there's no return, error handle
-            print('No Frames.')
+            logging.warning('No Frames.')
             return b''
         ret, jpeg = cv2.imencode('.jpg', frame) # encode img format and streams data
-        if not ret:
-            return b''
         return jpeg.tobytes() # Return each frame as a jpg in bytes
 
-router.get('/')
-def index():
-    return render_template('Camera.jsx')
 
-def generate_camera(camera):
+async def generate_camera(camera):
     while True: # Inf. loop to get frames
         frame = camera.get_frames() # Get the Frame from the Camera Class
-        yield (b'--frame\r\n'
-               b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-        
+        if frame:
+            yield (b'--frame\r\n'
+                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # More 'Features' from openCV Docs, have to provide the img extension (jpeg)
+        else:
+            break
 
 
-router.get('/video-feed')
-def get_video_feed():
-    pass
+@router.get('/api/camera')
+async def get_video_feed():
+    camera = Camera()
+    return StreamingResponse(
+        generate_camera(camera),
+        media_type='multipart/x-mixed-replace; boundary=frame'
+    )
