@@ -23,7 +23,8 @@ const AnimatedRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/cookingmode" element={<CookingMode />} />
+
+          <Route path="/cookingmode/:recipeId" element={<CookingMode />} />
         </Routes>
       </motion.div>
     </AnimatePresence>
