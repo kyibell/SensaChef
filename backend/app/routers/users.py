@@ -28,10 +28,10 @@ async def get_recipe(recipe_id: int):
     return response.data[0]
 
 @router.get("/recipes/{recipe_id}/steps", tags=["recipes"])
-async def get_recipe_steps(recipe_id: int, step_num: int = None):
+async def get_recipe_steps(recipe_id: int, step_number: int):
     query = supabase.table("steps").select("*").eq("recipe_id", recipe_id)
-    if step_num:
-        query = query.eq("step_num", step_num)
+    if step_number:
+        query = query.eq("step_number", step_number)
     response = query.execute()
     return response.data
 # ---------------------------------
