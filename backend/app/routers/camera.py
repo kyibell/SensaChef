@@ -1,6 +1,23 @@
 from fastapi import APIRouter, Response, render_template
 import cv2 # OpenCV import
 
+"""
+Any string with b'' is a byte string. Indicates that the string is a sequence of bytes and not unicode chracters.
+
+e.g byte_string = b'Hello World'
+print(byte_string) 
+Expected output would be b'Hello World!'
+
+however
+for byte in byte_string
+    print(byte)
+    Expected
+    72
+    101
+    108
+    ...
+"""
+
 # Define the Router
 router = APIRouter()
 
