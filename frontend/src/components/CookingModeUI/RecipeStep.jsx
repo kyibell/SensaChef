@@ -4,10 +4,11 @@ import { useParams } from 'react-router-dom'
 
 function RecipeStep({ recipeId }) {
     console.log("RECIPE ID IN RECIPESTEP: ", recipeId);
-    const [currentStep, setCurrentStep] = useState(null);
+    const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [recipeName, setRecipeName] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [steps, setSteps] = useState([]);
 
     useEffect( () => {
         console.log("RecipeStep WITH ID ", recipeId);
@@ -24,7 +25,7 @@ function RecipeStep({ recipeId }) {
                 setRecipeName(recipeData['recipe-name']);
 
                 // fetch step one
-                const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps?step_number=1`);
+                const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps`);
                 console.log("STEPS RESPONSE: ", stepsResponse.status);
                 
                 if (!stepsResponse.ok){
@@ -36,7 +37,7 @@ function RecipeStep({ recipeId }) {
 
 
                 if (stepsData && stepsData.length > 0){
-                    setCurrentStep(stepsData[0]);
+                    setSteps(stepsData.sort((a, b) => a.step_number - b.step_number));
                 }
                 else{
                     setError('No steps found');
@@ -51,14 +52,25 @@ function RecipeStep({ recipeId }) {
         fetchRecipeData();
     }, [recipeId]);
 
+    const handleNext = () => {
+        if(currentStepIndex< steps.length - 1){
+            setCurrentStepIndex(currentStepIndex + 1);
+        }
+    };
+
     if(loading) return <div> Loading cooking mode... </div>
     if(error) return <div> Error: {error} </div>
+
+    const currentStep = steps[currentStepIndex];
+    const isFirstStep = currentStepIndex === 0;
+    const isLastStep = currentStepIndex === steps.length - 1;
 
     return (
         <div>
             <h1>Cooking: {recipeName}</h1>
             <h2>Step {currentStep.step_number}</h2>
             <p>{currentStep.instruction}</p>
+            <button onClick={handleNext}>Next</button>
         </div>
     )
 }
