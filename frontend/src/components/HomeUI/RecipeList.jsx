@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 function RecipeList() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
@@ -38,7 +38,7 @@ function RecipeList() {
                     <li key={recipe.id}>
                         <h2
                             style={{cursor: 'pointer'}}
-                            onclick={() => navigate(`/cookingmode/${recipe.id}`)}
+                            onClick={() => navigate(`/cookingmode/${recipe.id}`)}
                             >{recipe['recipe-name']}</h2>
                         <p>{recipe.user_id}</p>
                     </li>
