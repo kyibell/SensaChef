@@ -9,7 +9,7 @@ function RecipeStep({ recipeId }) {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [steps, setSteps] = useState([]);
-
+    const [showCompletion, setShowCompletion] = useState(false);
     useEffect( () => {
         console.log("RecipeStep WITH ID ", recipeId);
         const fetchRecipeData = async () => {
@@ -56,6 +56,9 @@ function RecipeStep({ recipeId }) {
         if(currentStepIndex< steps.length - 1){
             setCurrentStepIndex(currentStepIndex + 1);
         }
+        else {
+            setShowCompletion(true);
+        }
     };
 
     if(loading) return <div> Loading cooking mode... </div>
@@ -68,9 +71,24 @@ function RecipeStep({ recipeId }) {
     return (
         <div>
             <h1>Cooking: {recipeName}</h1>
-            <h2>Step {currentStep.step_number}</h2>
-            <p>{currentStep.instruction}</p>
-            <button onClick={handleNext}>Next</button>
+            
+            {!showCompletion ? (
+                <>
+                    <h2>Step {currentStep.step_number}</h2>
+                    <p>{currentStep.instruction}</p>
+                    <button onClick={handleNext}>{isLastStep ? 'Finish' : 'Next'}</button>
+                </>
+                
+            ) : (
+                <div>
+                    <h3>Congratulations🎉</h3>
+                    <p>You have completed all steps</p>
+                    <button onClick={() => {
+                        setShowCompletion(false);
+                        setCurrentStepIndex(0);
+                    }}>Start Over</button>
+                </div>
+            )}
         </div>
     )
 }
