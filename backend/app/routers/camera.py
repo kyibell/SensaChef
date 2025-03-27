@@ -43,14 +43,20 @@ class Camera:
 
 
 async def generate_camera(camera):
-    while True: # Inf. loop to get frames
-        frame = camera.get_frames() # Get the Frame from the Camera Class
-        if frame:
-            yield (b'--frame\r\n'
-                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # More 'Features' from openCV Docs, have to provide the img extension (jpeg)
-        else:
-            break
-
+    try:
+        while True: # Inf. loop to get frames
+            frame = camera.get_frames() # Get the Frame from the Camera Class
+            if frame:
+                yield (b'--frame\r\n'
+                        b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n') # More 'Features' from openCV Docs, have to provide the img extension (jpeg)
+            else:
+                print("No frame recived, stopping stream...")
+                break
+    except Exception as error:
+        print("Streaming Error.")
+    finally:
+        del camera # Make sure the camera is deleted
+    
 
 @router.get('/api/camera')
 async def get_video_feed():
