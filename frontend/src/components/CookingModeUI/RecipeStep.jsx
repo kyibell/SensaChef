@@ -1,17 +1,19 @@
 import { steps } from 'framer-motion';
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-
+import SpeechController from '../Speech/speechController';
+import VoiceInput from '../Speech/stt';
 function RecipeStep({ recipeId }) {
-    console.log("RECIPE ID IN RECIPESTEP: ", recipeId);
+
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [recipeName, setRecipeName] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [steps, setSteps] = useState([]);
     const [showCompletion, setShowCompletion] = useState(false);
+
     useEffect( () => {
-        console.log("RecipeStep WITH ID ", recipeId);
+
         const fetchRecipeData = async () => {
 
             try{
@@ -37,7 +39,10 @@ function RecipeStep({ recipeId }) {
 
 
                 if (stepsData && stepsData.length > 0){
-                    setSteps(stepsData.sort((a, b) => a.step_number - b.step_number));
+                    const sortedSteps = stepsData.sort((a, b) => a.step_number - b.step_number);
+                    setSteps(sortedSteps);
+
+                    speakStep(sortedSteps[0]);
                 }
                 else{
                     setError('No steps found');
@@ -52,12 +57,35 @@ function RecipeStep({ recipeId }) {
         fetchRecipeData();
     }, [recipeId]);
 
+    const speakStep = (step) => {
+        if ('speechSynthesis' in window && step){
+            const spokenVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
+
+            if(!spokenVoice){
+                alert('No en-US voice available');
+                return;
+            }
+            const utterance = new SpeechSynthesisUtterance(`Step ${step.step_number}, ${step.instruction}`);
+            utterance.voice = spokenVoice;
+            window.speechSynthesis.speak(utterance);
+        }
+    }
     const handleNext = () => {
         if(currentStepIndex< steps.length - 1){
-            setCurrentStepIndex(currentStepIndex + 1);
+            const nextStepIndex = currentStepIndex + 1;
+            setCurrentStepIndex(nextStepIndex);
+            speakStep(steps[nextStepIndex])
         }
         else {
             setShowCompletion(true);
+            if ('speechSynthesis' in window) {
+                const spokenVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
+                if (spokenVoice) {
+                    const utterance = new SpeechSynthesisUtterance("Congratulations! You have completed all steps");
+                    utterance.voice = spokenVoice;
+                    window.speechSynthesis.speak(utterance);
+                }
+            }
         }
     };
 
@@ -76,6 +104,8 @@ function RecipeStep({ recipeId }) {
                 <>
                     <h2>Step {currentStep.step_number}</h2>
                     <p>{currentStep.instruction}</p>
+
+                    <SpeechController stepText={currentStep.instruction} />
                     <button onClick={handleNext}>{isLastStep ? 'Finish' : 'Next'}</button>
                 </>
                 
