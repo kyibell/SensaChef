@@ -4,8 +4,8 @@ import { useParams } from 'react-router-dom'
 import SpeechController from '../Speech/speechController';
 import VoiceInput from '../Speech/stt';
 function RecipeStep({ recipeId }) {
-
-    const [currentStepIndex, setCurrentStepIndex] = useState(0);
+    
+    const [currentStepIndex, setCurrentStepIndex] = useState(-1);
     const [recipeName, setRecipeName] = useState('');
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -42,7 +42,7 @@ function RecipeStep({ recipeId }) {
                     const sortedSteps = stepsData.sort((a, b) => a.step_number - b.step_number);
                     setSteps(sortedSteps);
 
-                    speakStep(sortedSteps[0]);
+                    speakMessage(`Welcome to cooking ${recipeData['recipe-name']}. Say next step or click next to begin.`)
                 }
                 else{
                     setError('No steps found');
@@ -65,27 +65,39 @@ function RecipeStep({ recipeId }) {
                 alert('No en-US voice available');
                 return;
             }
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(`Step ${step.step_number}, ${step.instruction}`);
             utterance.voice = spokenVoice;
             window.speechSynthesis.speak(utterance);
         }
-    }
+    };
+    const speakMessage = (message) => {
+        if ('speechSynthesis' in window) {
+            const spokenVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
+            if (spokenVoice) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(message);
+                utterance.voice = spokenVoice;
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+    };
     const handleNext = () => {
-        if(currentStepIndex< steps.length - 1){
+        if (currentStepIndex === -1) {
+            // Move from start message to first step
+            setCurrentStepIndex(0);
+            if (steps.length > 0) {
+                speakStep(steps[0]);
+            }
+        } 
+        else if(currentStepIndex < steps.length - 1){
             const nextStepIndex = currentStepIndex + 1;
             setCurrentStepIndex(nextStepIndex);
             speakStep(steps[nextStepIndex])
         }
         else {
             setShowCompletion(true);
-            if ('speechSynthesis' in window) {
-                const spokenVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
-                if (spokenVoice) {
-                    const utterance = new SpeechSynthesisUtterance("Congratulations! You have completed all steps");
-                    utterance.voice = spokenVoice;
-                    window.speechSynthesis.speak(utterance);
-                }
-            }
+            speakMessage("Congratulations! You have completed all steps");
         }
     };
 
@@ -99,8 +111,25 @@ function RecipeStep({ recipeId }) {
     return (
         <div>
             <h1>Cooking: {recipeName}</h1>
-            
-            {!showCompletion ? (
+
+            {showCompletion ? (
+                <div>
+                    <h3>Congratulations🎉</h3>
+                    <p>You have completed all steps</p>
+                    <button onClick={() => {
+                        setShowCompletion(false);
+                        setCurrentStepIndex(-1);
+                        speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click next to begin.`);
+                    }}>Start Over</button>
+                </div>
+                
+            ) : currentStepIndex === -1 ? (
+                <div>
+                    <h3>Welcome!</h3>
+                    <p>Click next or say "next step" to begin cooking.</p>
+                    <button onClick={handleNext}>Start Cooking</button>
+                </div>
+            ) : (
                 <>
                     <h2>Step {currentStep.step_number}</h2>
                     <p>{currentStep.instruction}</p>
@@ -108,16 +137,6 @@ function RecipeStep({ recipeId }) {
                     <SpeechController stepText={currentStep.instruction} />
                     <button onClick={handleNext}>{isLastStep ? 'Finish' : 'Next'}</button>
                 </>
-                
-            ) : (
-                <div>
-                    <h3>Congratulations🎉</h3>
-                    <p>You have completed all steps</p>
-                    <button onClick={() => {
-                        setShowCompletion(false);
-                        setCurrentStepIndex(0);
-                    }}>Start Over</button>
-                </div>
             )}
         </div>
     )
