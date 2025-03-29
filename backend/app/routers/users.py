@@ -5,20 +5,44 @@ from datetime import datetime, timezone
 router = APIRouter()
 class userModel(BaseModel):
     name: str
-    email: str
     username: str
+    email: str
     password: str
-    creationDate: datetime
-    
+
+class SignInModel(BaseModel):
+    email: str
+    password: str
+
 @router.get("/users", tags=["users"])
 async def read_all_users():
     response = supabase.table("users").select("*").execute()
     return response.data
 
-@router.post("/users", tags=["users"])
+@router.post("/create_user", tags=["users"])
 async def create_user(user: userModel):
-    response = supabase.table("users").insert({"name": user.name, "email": user.email, "username": user.username, "password": user.password, "creationDate": (datetime.now(timezone.utc)).isoformat()}).execute()
-    return response.data
+    response = supabase.auth.sign_up(
+    {
+        "email": user.email,
+        "password": user.password,
+        "options": {"data": {"full_name": user.name, "username": user.username}},
+    }
+)
+    return response
+@router.post("/sign_in", tags=["users"])
+async def sign_in(user: SignInModel):
+    response = supabase.auth.sign_in_with_password(
+    {
+        "email": user.email, 
+        "password": user.password,
+    }
+)
+    return response
+
+@router.get("/sign_out", tags=["users"])
+async def sign_out():
+    response = supabase.auth.sign_out()
+    return response
+
 
 @router.post("/users/recipes", tags=["users"])
 async def user_recipes(user_id: str):
