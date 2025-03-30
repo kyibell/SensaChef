@@ -32,7 +32,10 @@ const useSpeechToText = (options) => {
             setTranscript(text)
 
             if (options.commandHandler) {
-                options.commandHandler(text)
+                if(options.commandHandler(text)){
+                    setTranscript("");  
+                }
+                
             }
         }
 
@@ -52,8 +55,9 @@ const useSpeechToText = (options) => {
 
     const startListening = () => {
         if(recognitionRef.current && !isListening) {
-            recognitionRef.current.start()
-            setIsListening(true)
+            recognitionRef.current.start();
+            setIsListening(true);
+            setTranscript("");
         }
     }
 

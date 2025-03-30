@@ -14,19 +14,22 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
 
     const handleCommand = (transcript) => {
         const lowerTranscript = transcript.toLowerCase();
+        let isCommand = false;
         // Check if the transcript contains the command "next step"
         if (lowerTranscript.includes("next step")) {
             onNextStep && onNextStep();
+            isCommand = true;
         }
         else if (lowerTranscript.includes("previous step")) {
             onPreviousStep && onPreviousStep();
-
+            isCommand = true;
         }
 
         else if (lowerTranscript.includes("repeat")) {
             onRepeat(repeatTextRef.current)
-
+            isCommand = true;
         }
+        return isCommand;
     };
 
     const { isListening, transcript, startListening, stopListening } = useSpeechToText({
@@ -35,7 +38,13 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     })
 
     const startStopListening = () => {
-        isListening ? stopVoiceInput() : startListening()
+        if (isListening){
+            stopVoiceInput();
+        }
+        else {
+            setTextInput('');
+            startListening();
+        }
     }
 
     const stopVoiceInput = () => {
