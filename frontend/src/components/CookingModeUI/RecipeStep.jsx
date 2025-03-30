@@ -108,35 +108,43 @@ function RecipeStep({ recipeId }) {
         }
     };
     const handleNext = () => {
-        if (currentStepIndex === -1) {
-            // Move from start message to first step
-            setCurrentStepIndex(0);
-            if (steps.length > 0) {
-                speakStep(steps[0]);
+        setCurrentStepIndex(prevIndex => {
+            const newIndex = prevIndex + 1;
+            
+            if (prevIndex === -1) {
+                // Move from start message to first step
+                if (steps.length > 0) {
+                    speakStep(steps[0]);
+                }
+                return 0;
+            } 
+            else if (newIndex < steps.length) {
+                speakStep(steps[newIndex]);
+                return newIndex;
             }
-        } 
-        else if(currentStepIndex < steps.length - 1){
-            const nextStepIndex = currentStepIndex + 1;
-            setCurrentStepIndex(nextStepIndex);
-            speakStep(steps[nextStepIndex])
-        }
-        else {
-            setShowCompletion(true);
-            speakMessage("Congratulations! You have completed all steps");
-        }
+            else {
+                // Reached the end
+                setShowCompletion(true);
+                speakMessage("Congratulations! You have completed all steps");
+                return prevIndex; // Stay on last step
+            }
+        });
     };
 
     const handlePrevious = () => {
-        if (currentStepIndex > 0) {
-            const prevStepIndex = currentStepIndex - 1;
-            setCurrentStepIndex(prevStepIndex);
-            speakStep(steps[prevStepIndex]);
-        } 
-        else if (currentStepIndex === 0) {
-            // Go back to welcome message
-            setCurrentStepIndex(-1);
-            speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click next to begin.`);
-        }
+        setCurrentStepIndex(prevIndex => {
+            if (prevIndex > 0) {
+                const prevStepIndex = prevIndex - 1;
+                speakStep(steps[prevStepIndex]);
+                return prevStepIndex;
+            } 
+            else if (prevIndex === 0) {
+                // Go back to welcome message
+                speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click next to begin.`);
+                return -1;
+            }
+            return prevIndex; // If already at -1, stay there
+        });
     };
 
     const handleStartOver = () => {
