@@ -4,9 +4,10 @@ import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 
 function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     const [textInput, setTextInput] = useState('');
-    const enUSVoice = useTextToSpeech()
+    const enUSVoice = useTextToSpeech();
     const commandExecutedRef = useRef(false);
     const repeatTextRef = useRef(repeatText);
+    const [forceStop, setForceStop] = useState(false);
 
     useEffect(() => {
         repeatTextRef.current = repeatText;
@@ -37,15 +38,27 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
                 onRepeat(repeatTextRef.current)
                 isCommand = true;
             }
-            stopListening();
+            
+            // Stop listening when a command is detected
+            if (isCommand) {
+                console.log("in stop listening if statement")
+                abortListening();
+                setForceStop(true);
+                console.log(isListening);
+                setTextInput(''); // Clear the transcript
+            }
+
             setTimeout(() => {
                 commandExecutedRef.current = false;
-            }, 2000);
+                // console.log("in set timeout")
+                // setForceStop(false);
+            }, 1000);
+
         }
         return isCommand;
     };
 
-    const { isListening, transcript, startListening, stopListening } = useSpeechToText({
+    const { isListening, transcript, startListening, stopListening, abortListening } = useSpeechToText({
         continuous: true,
         commandHandler: handleCommand,
     });
@@ -55,15 +68,18 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
         }
         else {
             setTextInput('');
+            setForceStop(false);
             startListening();
         }
     }
 
     const stopVoiceInput = () => {
-        setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''))
-        stopListening()
+        abortListening();
+        setForceStop(true);
+        setTextInput('');
     }
 
+    const showListening = isListening && !forceStop;
     return (
         <div className="speech-section">
             <h1>Speech to Text</h1>
@@ -73,8 +89,13 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
                 onChange={(e) => setTextInput(e.target.value)}
             />
             <button onClick={startStopListening}>
-                {isListening ? 'Stop Listening' : 'Speak'}
+                {showListening ? 'Stop Listening' : 'Speak'}
             </button>
+            {forceStop && (
+                <div>
+                    Command processed - mic off
+                </div>
+            )}
         </div>
     );
     
