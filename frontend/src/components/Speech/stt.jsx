@@ -2,29 +2,28 @@ import React, { useEffect, useState, useRef } from 'react'
 import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
 import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 
-function VoiceInput({ onRepeat, repeatText }) {
+function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     const [textInput, setTextInput] = useState('');
     const enUSVoice = useTextToSpeech()
 
     const repeatTextRef = useRef(repeatText);
-    //HERE TEXT IS UNDEFINED
 
     useEffect(() => {
         repeatTextRef.current = repeatText;
     }, [repeatText])
 
     const handleCommand = (transcript) => {
-
+        const lowerTranscript = transcript.toLowerCase();
         // Check if the transcript contains the command "next step"
-        if (transcript.toLowerCase() === "next step") {
-            alert("Moving to the next step!"); // Replace this with logic  
+        if (lowerTranscript.includes("next step")) {
+            onNextStep && onNextStep();
         }
-        else if (transcript.toLowerCase() === "previous step") {
-            alert("Moving to the next step!"); // Replace this with logic
+        else if (lowerTranscript.includes("previous step")) {
+            onPreviousStep && onPreviousStep();
 
         }
 
-        else if (transcript.toLowerCase() === "repeat") {
+        else if (lowerTranscript.includes("repeat")) {
             onRepeat(repeatTextRef.current)
 
         }

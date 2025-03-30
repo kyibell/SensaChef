@@ -3,7 +3,7 @@ import VoiceInput from "./stt";
 import TextToSpeech from "./tts";
 import "./SpeechController.css"; 
 
-function SpeechController({ stepText }) {
+function SpeechController({ stepText, onNextStep, onPreviousStep }) {
     // const [text, setText] = useState("");
 
     // const handleUpdate = (newValue) => {
@@ -52,6 +52,8 @@ function SpeechController({ stepText }) {
             <VoiceInput
                 repeatText={stepText}
                 onRepeat={repeat}
+                onNextStep={onNextStep}
+                onPreviousStep={onPreviousStep}
             />
         </div>
     );

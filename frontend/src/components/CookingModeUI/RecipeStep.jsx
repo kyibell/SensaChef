@@ -126,6 +126,19 @@ function RecipeStep({ recipeId }) {
         }
     };
 
+    const handlePrevious = () => {
+        if (currentStepIndex > 0) {
+            const prevStepIndex = currentStepIndex - 1;
+            setCurrentStepIndex(prevStepIndex);
+            speakStep(steps[prevStepIndex]);
+        } 
+        else if (currentStepIndex === 0) {
+            // Go back to welcome message
+            setCurrentStepIndex(-1);
+            speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click next to begin.`);
+        }
+    };
+
     const handleStartOver = () => {
         setShowCompletion(false);
         setCurrentStepIndex(-1);
@@ -150,6 +163,8 @@ function RecipeStep({ recipeId }) {
                             "Congratulations! You have completed all steps" : 
                             steps[currentStepIndex]?.instruction || ""
                 }
+                onNextStep={handleNext}
+                onPreviousStep={handlePrevious}
             />
             {showCompletion ? (
                 <div>
@@ -168,8 +183,10 @@ function RecipeStep({ recipeId }) {
                 <>
                     <h2>Step {currentStep.step_number}</h2>
                     <p>{currentStep.instruction}</p>
-
-                    <button onClick={handleNext}>{isLastStep ? 'Finish' : 'Next'}</button>
+                    <div>
+                        <button onClick={handlePrevious} disabled={currentStepIndex === 0}>Previous</button>
+                        <button onClick={handleNext}>{isLastStep ? 'Finish' : 'Next'}</button>
+                    </div>
                     {/* <SpeechController stepText={currentStep.instruction} /> */}
                 </>
             )}
