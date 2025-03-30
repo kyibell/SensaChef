@@ -5,29 +5,42 @@ import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     const [textInput, setTextInput] = useState('');
     const enUSVoice = useTextToSpeech()
-
+    const commandExecutedRef = useRef(false);
     const repeatTextRef = useRef(repeatText);
 
     useEffect(() => {
         repeatTextRef.current = repeatText;
     }, [repeatText])
 
+
     const handleCommand = (transcript) => {
         const lowerTranscript = transcript.toLowerCase();
         let isCommand = false;
-        // Check if the transcript contains the command "next step"
-        if (lowerTranscript.includes("next step")) {
-            onNextStep && onNextStep();
-            isCommand = true;
-        }
-        else if (lowerTranscript.includes("previous step")) {
-            onPreviousStep && onPreviousStep();
-            isCommand = true;
+
+        if (!lowerTranscript.includes("next step") && !lowerTranscript.includes("previous step") && !lowerTranscript.includes("repeat")) {
+            return false;
         }
 
-        else if (lowerTranscript.includes("repeat")) {
-            onRepeat(repeatTextRef.current)
-            isCommand = true;
+        if (!commandExecutedRef.current) {
+            commandExecutedRef.current = true;
+
+            if (lowerTranscript.includes("next step")) {
+                onNextStep?.();
+                isCommand = true;
+            }
+            else if (lowerTranscript.includes("previous step")) {
+                onPreviousStep?.();
+                isCommand = true;
+            }
+
+            else if (lowerTranscript.includes("repeat")) {
+                onRepeat(repeatTextRef.current)
+                isCommand = true;
+            }
+            stopListening();
+            setTimeout(() => {
+                commandExecutedRef.current = false;
+            }, 2000);
         }
         return isCommand;
     };
@@ -35,8 +48,7 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     const { isListening, transcript, startListening, stopListening } = useSpeechToText({
         continuous: true,
         commandHandler: handleCommand,
-    })
-
+    });
     const startStopListening = () => {
         if (isListening){
             stopVoiceInput();
