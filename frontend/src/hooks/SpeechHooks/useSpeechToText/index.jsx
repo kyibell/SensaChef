@@ -33,7 +33,9 @@ const useSpeechToText = (options) => {
 
             if (options.commandHandler) {
                 if(options.commandHandler(text)){
-                    setTranscript("");  
+                    setTimeout(() => {
+                        setTranscript("");  
+                    }, 1000); 
                 }
                 
             }
