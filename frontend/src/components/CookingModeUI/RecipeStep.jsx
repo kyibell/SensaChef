@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import SpeechController from '../Speech/speechController';
 import VoiceInput from '../Speech/stt';
+import { useNavigate } from 'react-router-dom';
 function RecipeStep({ recipeId }) {
 
     const [currentStepIndex, setCurrentStepIndex] = useState(-1);
@@ -12,6 +13,7 @@ function RecipeStep({ recipeId }) {
     const [steps, setSteps] = useState([]);
     const [showCompletion, setShowCompletion] = useState(false);
     const voicesLoaded = useRef(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const loadVoices = () => {
@@ -62,7 +64,7 @@ function RecipeStep({ recipeId }) {
 
                     const checkVoices = () => {
                         if (voicesLoaded.current) {
-                            speakMessage(`Welcome to cooking ${recipeData['recipe-name']}. Say next step or click next to begin.`);
+                            speakMessage(`Welcome to cooking ${recipeData['recipe-name']}. Say next step or click start cooking to begin.`);
                         } else {
                             setTimeout(checkVoices, 100);
                         }
@@ -133,14 +135,18 @@ function RecipeStep({ recipeId }) {
 
     const handlePrevious = () => {
         setCurrentStepIndex(prevIndex => {
-            if (prevIndex > 0) {
+            if (showCompletion){
+                setShowCompletion(false);
+                return steps.length - 1;
+            }
+            else if (prevIndex > 0) {
                 const prevStepIndex = prevIndex - 1;
                 speakStep(steps[prevStepIndex]);
                 return prevStepIndex;
             } 
             else if (prevIndex === 0) {
                 // Go back to welcome message
-                speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click next to begin.`);
+                speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click start cooking to begin.`);
                 return -1;
             }
             return prevIndex; // If already at -1, stay there
@@ -150,7 +156,7 @@ function RecipeStep({ recipeId }) {
     const handleStartOver = () => {
         setShowCompletion(false);
         setCurrentStepIndex(-1);
-        speakMessage(`Welcome to cooking ${recipeName}. Say next step or click next to begin.`);
+        speakMessage(`Welcome to cooking ${recipeName}. Say next step or click start cooking to begin.`);
     };
 
     if(loading) return <div> Loading cooking mode... </div>
@@ -165,11 +171,11 @@ function RecipeStep({ recipeId }) {
             <h1>Cooking: {recipeName}</h1>
             <SpeechController 
                 stepText={
+                    showCompletion ? 
+                        "Congratulations! You have completed all steps" : 
                     currentStepIndex === -1 ? 
                         `Welcome to cooking ${recipeName}` : 
-                        showCompletion ? 
-                            "Congratulations! You have completed all steps" : 
-                            steps[currentStepIndex]?.instruction || ""
+                        steps[currentStepIndex]?.instruction || ""
                 }
                 onNextStep={handleNext}
                 onPreviousStep={handlePrevious}
@@ -179,12 +185,13 @@ function RecipeStep({ recipeId }) {
                     <h3>Congratulations🎉</h3>
                     <p>You have completed all steps</p>
                     <button onClick={handleStartOver}>Start Over</button>
+                    <button onClick={() => navigate(`/home`)}>Home</button>
                 </div>
                 
             ) : currentStepIndex === -1 ? (
                 <div>
                     <h3>Welcome!</h3>
-                    <p>Click next or say "next step" to begin cooking.</p>
+                    <p>Click Start Cooking or say "next step" to begin cooking.</p>
                     <button onClick={handleNext}>Start Cooking</button>
                 </div>
             ) : (
@@ -198,6 +205,14 @@ function RecipeStep({ recipeId }) {
                     {/* <SpeechController stepText={currentStep.instruction} /> */}
                 </>
             )}
+            <div>
+                Commands available:
+                <ul>
+                    <li>Repeat - repeats the instruction</li>
+                    <li>Next step - moves to the next step unless the user is on the successful completion message</li>
+                    <li>Previous step - moves to the previous step unless the user is on the welcome message</li>
+                </ul>
+            </div>
         </div>
     )
 }
