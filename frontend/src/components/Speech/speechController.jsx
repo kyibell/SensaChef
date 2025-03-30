@@ -45,10 +45,10 @@ function SpeechController({ stepText, onNextStep, onPreviousStep }) {
 
     return (
         <div className="speech-controller">
-            <TextToSpeech
+            {/* <TextToSpeech
                 text={stepText}
                 speak={speak}
-            />
+            /> */}
             <VoiceInput
                 repeatText={stepText}
                 onRepeat={repeat}
