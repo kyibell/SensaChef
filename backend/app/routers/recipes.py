@@ -21,7 +21,7 @@ async def get_all_recipes():
 @router.get("/recipes/{recipe_id}", tags=["recipes"])
 async def get_recipe(recipe_id: int):
     response = supabase.table("recipes").select("*").eq("id", recipe_id).execute()
-    return response.data[1]
+    return response.data[0]
 
 # Fetch Recipe Steps
 @router.get("/recipes/{recipe_id}/steps", tags=["recipes"])
