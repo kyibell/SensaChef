@@ -10,6 +10,7 @@ WORKDIR /app
 
 # Install system dependencies required by psycopg2 (PostgreSQL adapter).
 RUN apt-get update && apt-get install -y gcc libpq-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install ffmpeg libsm6 libxext6  -y
 
 # Copy the requirements file into the container.
 COPY requirements.txt /app/
