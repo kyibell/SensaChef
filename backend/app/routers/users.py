@@ -1,8 +1,11 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Depends
 from app.database import supabase
+from app.database import admin_supabase
 from pydantic import BaseModel
 from datetime import datetime, timezone
 from fastapi import HTTPException
+from app.auth.auth_handler import JWTBearer
+
 router = APIRouter()
 class userModel(BaseModel):
     name: str
@@ -13,7 +16,7 @@ class userModel(BaseModel):
 class SignInModel(BaseModel):
     email: str
     password: str
-
+   
 @router.get("/users", tags=["users"])
 async def read_all_users():
     response = supabase.table("users").select("*").execute()
@@ -88,7 +91,8 @@ async def update_user(user_id: str, user: userModel):
     }).eq("user_id", user_id).execute()
     return response.data
 
-@router.delete("/users/{user_id}", tags=["users"])
+@router.delete("/users/{user_id}", dependencies=[Depends(JWTBearer())], tags=["users"])
 async def delete_user(user_id: str):
     response = supabase.table("users").delete().eq("user_id", user_id).execute()
+    admin_supabase.auth.admin.delete_user(user_id)
     return response.data
