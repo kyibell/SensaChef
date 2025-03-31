@@ -126,7 +126,9 @@ function RecipeStep({ recipeId }) {
             }
             else {
                 // Reached the end
-                setShowCompletion(true);
+                setShowCompletion(prev => {
+                    return true;
+                });
                 speakMessage("Congratulations! You have completed all steps");
                 return prevIndex; // Stay on last step
             }
@@ -134,22 +136,30 @@ function RecipeStep({ recipeId }) {
     };
 
     const handlePrevious = () => {
-        setCurrentStepIndex(prevIndex => {
-            if (showCompletion){
-                setShowCompletion(false);
-                return steps.length - 1;
+        setShowCompletion(prevCompletion => {
+            if (prevCompletion) {
+                console.log("Was on completion screen - going back to last step");
+                setCurrentStepIndex(steps.length - 1);
+                speakStep(steps[steps.length - 1]);
+                return false;
             }
-            else if (prevIndex > 0) {
-                const prevStepIndex = prevIndex - 1;
-                speakStep(steps[prevStepIndex]);
-                return prevStepIndex;
-            } 
-            else if (prevIndex === 0) {
-                // Go back to welcome message
-                speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click start cooking to begin.`);
-                return -1;
+            else {
+                // Normal previous step logic
+                setCurrentStepIndex(prevIndex => {
+                    console.log("Normal previous step navigation");
+                    if (prevIndex > 0) {
+                        const prevStepIndex = prevIndex - 1;
+                        speakStep(steps[prevStepIndex]);
+                        return prevStepIndex;
+                    } 
+                    else if (prevIndex === 0) {
+                        speakMessage(`Welcome to cooking ${recipeName}. Say "next step" or click start cooking to begin.`);
+                        return -1;
+                    }
+                    return prevIndex;
+                });
+                return prevCompletion;
             }
-            return prevIndex; // If already at -1, stay there
         });
     };
 
