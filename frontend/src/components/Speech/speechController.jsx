@@ -3,24 +3,27 @@ import VoiceInput from "./stt";
 import TextToSpeech from "./tts";
 import "./SpeechController.css"; 
 
-function SpeechController() {
-    const [text, setText] = useState("");
+function SpeechController({ stepText, onNextStep, onPreviousStep }) {
+    // const [text, setText] = useState("");
 
-    const handleUpdate = (newValue) => {
-        setText(newValue);
-    };
+    // const handleUpdate = (newValue) => {
+    //     setText(newValue);
+    // };
 
     const speak = () => {
-        if ('speechSynthesis' in window) {
+        if ('speechSynthesis' in window && stepText) {
             let spokenVoice = window.speechSynthesis.getVoices().find(voice => voice.lang === 'en-US');
             if (!spokenVoice) {
                 alert('No en-US voice available.');
                 return;
             }
-            const utterance = new SpeechSynthesisUtterance(text);
+            const utterance = new SpeechSynthesisUtterance(stepText);
             utterance.voice = spokenVoice;
             window.speechSynthesis.speak(utterance);
-        } else {
+        } else if (!stepText){
+            alert('No step text to read');
+        }
+        else{
             alert('Sorry, your browser does not support text to speech!');
         }
     };
@@ -42,15 +45,15 @@ function SpeechController() {
 
     return (
         <div className="speech-controller">
-            <TextToSpeech
-                text={text}
-                setText={setText}
+            {/* <TextToSpeech
+                text={stepText}
                 speak={speak}
-                onUpdate={handleUpdate}
-            />
+            /> */}
             <VoiceInput
-                repeatText={text}
+                repeatText={stepText}
                 onRepeat={repeat}
+                onNextStep={onNextStep}
+                onPreviousStep={onPreviousStep}
             />
         </div>
     );
