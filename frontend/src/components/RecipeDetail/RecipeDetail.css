@@ -1,0 +1,23 @@
+.recipe-detail { 
+    padding: "2rem";
+    max-width: "500px";
+    margin: "auto";
+}
+img {
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 1rem;
+}
+ol {
+    padding-left: 1rem;
+}
+li {
+    margin-bottom: 1rem;
+}
+.cooking-div {
+    margin-top: 2rem;
+}
+.cooking-button-mode {
+    padding: .75rem 1.5rem;
+    font-size: 1rem;
+}
