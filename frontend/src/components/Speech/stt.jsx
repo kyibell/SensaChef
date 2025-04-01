@@ -2,48 +2,84 @@ import React, { useEffect, useState, useRef } from 'react'
 import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
 import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 
-function VoiceInput({ onRepeat, repeatText }) {
+function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
     const [textInput, setTextInput] = useState('');
-    const enUSVoice = useTextToSpeech()
-
+    const enUSVoice = useTextToSpeech();
+    const commandExecutedRef = useRef(false);
     const repeatTextRef = useRef(repeatText);
-    //HERE TEXT IS UNDEFINED
+    const [forceStop, setForceStop] = useState(false);
 
     useEffect(() => {
         repeatTextRef.current = repeatText;
     }, [repeatText])
 
+
     const handleCommand = (transcript) => {
+        const lowerTranscript = transcript.toLowerCase();
+        let isCommand = false;
 
-        // Check if the transcript contains the command "next step"
-        if (transcript.toLowerCase() === "next step") {
-            alert("Moving to the next step!"); // Replace this with logic  
-        }
-        else if (transcript.toLowerCase() === "previous step") {
-            alert("Moving to the next step!"); // Replace this with logic
-
+        if (!lowerTranscript.includes("next step") && !lowerTranscript.includes("previous step") && !lowerTranscript.includes("repeat")) {
+            return false;
         }
 
-        else if (transcript.toLowerCase() === "repeat") {
-            onRepeat(repeatTextRef.current)
+        if (!commandExecutedRef.current) {
+            commandExecutedRef.current = true;
+
+            if (lowerTranscript.includes("next step")) {
+                onNextStep?.();
+                isCommand = true;
+            }
+            else if (lowerTranscript.includes("previous step")) {
+                onPreviousStep?.();
+                isCommand = true;
+            }
+
+            else if (lowerTranscript.includes("repeat")) {
+                onRepeat(repeatTextRef.current)
+                isCommand = true;
+            }
+            
+            // Stop listening when a command is detected
+            if (isCommand) {
+                console.log("in stop listening if statement")
+                abortListening();
+                setForceStop(true);
+                console.log(isListening);
+                setTextInput(''); // Clear the transcript
+            }
+
+            setTimeout(() => {
+                commandExecutedRef.current = false;
+                // console.log("in set timeout")
+                // setForceStop(false);
+            }, 1000);
 
         }
+        return isCommand;
     };
 
-    const { isListening, transcript, startListening, stopListening } = useSpeechToText({
+    const { isListening, transcript, startListening, stopListening, abortListening } = useSpeechToText({
         continuous: true,
         commandHandler: handleCommand,
-    })
-
+    });
     const startStopListening = () => {
-        isListening ? stopVoiceInput() : startListening()
+        if (isListening){
+            stopVoiceInput();
+        }
+        else {
+            setTextInput('');
+            setForceStop(false);
+            startListening();
+        }
     }
 
     const stopVoiceInput = () => {
-        setTextInput(prevVal => prevVal + (transcript.length ? (prevVal.length ? ' ' : '') + transcript : ''))
-        stopListening()
+        abortListening();
+        setForceStop(true);
+        setTextInput('');
     }
 
+    const showListening = isListening && !forceStop;
     return (
         <div className="speech-section">
             <h1>Speech to Text</h1>
@@ -53,8 +89,13 @@ function VoiceInput({ onRepeat, repeatText }) {
                 onChange={(e) => setTextInput(e.target.value)}
             />
             <button onClick={startStopListening}>
-                {isListening ? 'Stop Listening' : 'Speak'}
+                {showListening ? 'Stop Listening' : 'Speak'}
             </button>
+            {forceStop && (
+                <div>
+                    Command processed - mic off
+                </div>
+            )}
         </div>
     );
     

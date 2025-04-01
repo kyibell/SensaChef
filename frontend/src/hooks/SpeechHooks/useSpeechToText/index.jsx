@@ -5,6 +5,14 @@ const useSpeechToText = (options) => {
     const [transcript, setTranscript] = useState("")
     const recognitionRef = useRef(null) 
 
+    const abortListening = () => {
+        if (recognitionRef.current) {
+            recognitionRef.current.abort();
+            setIsListening(false);
+            setTranscript("");
+        }
+    };
+
     useEffect(()=>{
         // Check if web speech api is supported
         if(!('webkitSpeechRecognition' in window)){
@@ -31,8 +39,9 @@ const useSpeechToText = (options) => {
             }
             setTranscript(text)
 
-            if (options.commandHandler) {
-                options.commandHandler(text)
+            if (options.commandHandler && options.commandHandler(text)) {
+                abortListening();
+                
             }
         }
 
@@ -52,8 +61,9 @@ const useSpeechToText = (options) => {
 
     const startListening = () => {
         if(recognitionRef.current && !isListening) {
-            recognitionRef.current.start()
-            setIsListening(true)
+            recognitionRef.current.start();
+            setIsListening(true);
+            setTranscript("");
         }
     }
 
@@ -68,7 +78,8 @@ const useSpeechToText = (options) => {
         isListening,
         transcript,
         startListening,
-        stopListening
+        stopListening,
+        abortListening
     }
 }
 
