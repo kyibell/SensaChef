@@ -40,7 +40,7 @@ const recipes = {
 
   cereal: { 
     title: "Cereal", 
-    image: "Cereal.jpg", 
+    image: "cereal.jpg", 
     description: "A quick and healthy breakfast option consisting of crunchy cereal, cold milk, and optional fresh fruit toppings. Perfect for busy mornings.", 
     ingredients: ["Cereal", "Milk", "Fruits (optional)"] 
   },
