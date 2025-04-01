@@ -30,7 +30,7 @@ const AnimatedRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-
+          <Route path="/recipes/:recipeName" element={<RecipePage />} />
           <Route path="/cookingmode/:recipeId" element={<CookingMode />} />
         </Routes>
       </motion.div>
