@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom'
 import SpeechController from '../Speech/speechController';
 import VoiceInput from '../Speech/stt';
 import { useNavigate } from 'react-router-dom';
+import './RecipeStep.css';
+import Timer from '../Timer/Timer';
+
 function RecipeStep({ recipeId }) {
 
     const [currentStepIndex, setCurrentStepIndex] = useState(-1);
@@ -177,7 +180,7 @@ function RecipeStep({ recipeId }) {
     const isLastStep = currentStepIndex === steps.length - 1;
 
     return (
-        <div>
+        <div className='command-container'>
             <h1>Cooking: {recipeName}</h1>
             <SpeechController 
                 stepText={
@@ -215,7 +218,7 @@ function RecipeStep({ recipeId }) {
                     {/* <SpeechController stepText={currentStep.instruction} /> */}
                 </>
             )}
-            <div>
+            <div className='commands-div'>
                 Commands available:
                 <ul>
                     <li>Repeat - repeats the instruction</li>
@@ -223,7 +226,11 @@ function RecipeStep({ recipeId }) {
                     <li>Previous step - moves to the previous step unless the user is on the welcome message</li>
                 </ul>
             </div>
+            <div>
+                <Timer />
+            </div>
         </div>
+        
     )
 }
 
