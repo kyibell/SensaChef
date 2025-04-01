@@ -1,6 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import Nav from "../components/Navigation/Navbar";
-import RecipeCard from "../components/RecipePageUI/RecipeCard";
+import RecipeList from "../components/HomeUI/RecipeList";
 
 
 const recipes = [
@@ -17,23 +17,13 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <>
-      <Nav />
-      <h1>This is the home page</h1>
-      <h2>Not complete</h2>
-      
-      <button onClick={() => navigate('/cookingmode')}>
-        Click to go into cooking mode
-      </button>
-
-      {/* Recipe List */}
-      <div className="recipe-list">
-        {recipes.map((recipe) => (
-          <RecipeCard key={recipe.id} recipe={recipe} />
-        ))}
-      </div>
-    </>
-  );
+  <>
+    <h1>This is the home page</h1>
+    <h2>Not complete</h2>
+    <button onClick={() => navigate('/cookingmode')} >Click to go into cooking mode</button>
+     <RecipeList />
+  </>
+  )
 }
 
 export default Home;

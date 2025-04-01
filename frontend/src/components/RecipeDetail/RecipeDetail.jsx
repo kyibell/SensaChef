@@ -1,6 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import "../components/RecipePageUI/RecipePageUI.css";
-
+import "../RecipePageUI/RecipePageUI.css";
 
 const recipes = {
   pizza: { 
