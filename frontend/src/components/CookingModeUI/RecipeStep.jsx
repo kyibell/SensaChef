@@ -1,6 +1,6 @@
-import { steps } from 'framer-motion';
+//import { steps } from 'framer-motion';
 import React, { useState, useRef, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+//import { useParams } from "react-router-dom";
 import SpeechController from '../Speech/speechController';
 import VoiceInput from '../Speech/stt';
 import { useNavigate } from 'react-router-dom';

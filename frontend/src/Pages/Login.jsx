@@ -1,11 +1,9 @@
 import LoginUI from "../components/LoginUI/LoginUI";
 
-function Login() {
-    return(
-        <>
-            <LoginUI />
-        </>
-    );
+
+function  Login() {
+    return <LoginUI />;
 }
 
-export default Login
+
+export default Login;
