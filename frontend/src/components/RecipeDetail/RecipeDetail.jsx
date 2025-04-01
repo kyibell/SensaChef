@@ -40,7 +40,7 @@ const RecipeDetail = () => {
 	if (!recipe) return <p>Recipe not found.</p>;
 
 	return (
-		<div className="recipe-detail">
+		<div className="recipe-container-detail">
 			<h1>{recipe["recipe-name"]}</h1>
 			{recipe.image_url && (
 				<img
