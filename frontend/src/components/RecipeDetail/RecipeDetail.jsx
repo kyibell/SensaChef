@@ -42,6 +42,7 @@ const RecipeDetail = () => {
 	return (
 		<div className="recipe-container-detail">
 			<h1>{recipe["recipe-name"]}</h1>
+			<hr />
 			{recipe.image_url && (
 				<img
 					src={
@@ -51,7 +52,7 @@ const RecipeDetail = () => {
 					alt={recipe["recipe-name"]}
 				/>
 			)}
-			<p>{recipe.description || "No description provided."}</p>
+			<p className="food-description">{recipe.description || "No description provided."}</p>
 
 			<h3>Steps</h3>
 			<ol>

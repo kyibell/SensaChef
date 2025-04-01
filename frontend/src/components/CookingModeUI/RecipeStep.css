@@ -1,0 +1,65 @@
+.command-container {
+    font-family: 'Poppins', sans-serif;
+    padding: 2rem;
+    color: #000;
+    max-width: 1000px;
+    margin: auto;
+    background-color: #fff9f0;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+}
+  
+.command-container h1,
+.command-container h2,
+.command-container h3 {
+    color: #d35400; /* deep orange for headers */
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+  
+.command-container p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    color: #333;
+}
+  
+button {
+    background-color: #d35400;
+    color: #fff;
+    font-size: 1.2rem;
+    padding: 1rem 2rem;
+    margin: 0.5rem;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+  
+button:hover, button:focus {
+    background-color: #e67e22;
+    outline: none;
+}
+  
+button:disabled {
+    background-color: #ccc;
+    color: #888;
+    cursor: not-allowed;
+}
+  
+.commands-div {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 2px solid #ffa64d;
+}
+  
+.commands-div ul {
+    padding-left: 1.5rem;
+    font-size: 1.1rem;
+    color: #444;
+}
+  
+.commands-div li {
+    margin-bottom: 0.75rem;
+}
+  
