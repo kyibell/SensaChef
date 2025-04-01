@@ -10,7 +10,7 @@ import Home from "./Pages/Home";
 import SignUp from "./Pages/Sign-up";
 import CookingMode from "./Pages/CookingMode";
 import Login from "./Pages/Login";
-import RecipePage from "./Pages/RecipeDetail"; 
+import RecipePage from "./components/RecipeDetail/RecipeDetail"; 
 import "./components/RecipePageUI/RecipePageUI.css";
 
 const pageVariants = {
