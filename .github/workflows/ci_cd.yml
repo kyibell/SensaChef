@@ -83,6 +83,6 @@ jobs:
       # For now, we just deploy via the webhook.
       - name: Deploy Frontend
         env:
-          deploy_url: ${{ secrets.FRONTEND_DEPLOY_HOOK }}
+          deploy_url: ${{ secrets.FRONTEND_RENDER_DEPLOY_HOOK }}
         run: |
           curl "$deploy_url"
