@@ -68,7 +68,7 @@ jobs:
         env:
           deploy_url: ${{ secrets.BACKEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
 
   # Job 3: Run frontend deployment if frontend files changed
   frontend_deploy:
@@ -85,4 +85,4 @@ jobs:
         env:
           deploy_url: ${{ secrets.FRONTEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
