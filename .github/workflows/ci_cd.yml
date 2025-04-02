@@ -1,0 +1,84 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  backend_fastapi:
+    name: Backend (Fast API)
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the repository
+      - uses: actions/checkout@v3
+
+      # Set up Python
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.10-slim"
+
+      # Install Python dependencies
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+      # Step 3: Lint Python code
+      #### 
+      - name: Lint Python code
+        run: |
+          if [ -f .flake8 ] || [ -f setup.cfg ] || [ -f tox.ini ] || [ -f .pep8 ]; then
+            flake8 .
+          else
+            echo "No lint configuration found, skipping linting."
+          fi
+      # Step 4: Run Python tests
+      ####
+      - name: Run Python tests
+        run: |
+          if [ -f pytest.ini ] || ls tests; then
+            pytest
+          else
+            echo "No tests found, skipping tests."
+          fi
+
+  deploy:
+    name: Deploy & Push to Docker Hub
+    needs: [backend_fastapi]
+    runs-on: ubuntu-latest
+    # Important step - add your environment name
+    environment: PROD
+    steps:
+        - uses: actions/checkout@v3
+
+        # Optional: List repository files to verify the docker-compose file exists
+        - name: List repository files
+          run: ls -al
+
+    # Step 7: Build docker image 
+    # Go to dockerhub.com
+    # Create a new repository - backend_flask
+    # Create a new access token - <access_token>
+    # Note down your username - <username>
+    # Add the following secrets to your GitHub repository - Environment (name = TEST)
+    # add the Environment name to the deploy job above (important step)
+    # https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions
+    #### 
+        - name: Build Docker Image
+          run: |
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend_fastapi:latest .
+            # make sure that your dockerhub repo name matches as this line (backend_flask)
+            
+    # Step 8: # Log in to Docker Hub
+    #### 
+        - name: Log in to Docker Hub
+          run: echo "${{ secrets.DOCKERHUB_ACCESS_TOKEN }}" | docker login --username ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          
+    # Step 8: Push docker image to dockerhub
+    ####
+        - name: Push Docker Image
+          run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend_fastapi:latest
