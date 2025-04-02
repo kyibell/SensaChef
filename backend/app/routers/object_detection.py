@@ -2,17 +2,20 @@ from fastapi import APIRouter, File, UploadFile # For Route
 import io # For opening image bytes
 import torchvision.transforms as transforms # transforms for image detection
 from torchvision import models # model import
+from torchvision.models import resnet18, ResNet18_Weights
 from PIL import Image # for image handling
 import json # for class names and json file
 import os # for paths
+import torch
 
 base_directory = os.path.dirname(os.path.abspath(__file__)) # Get the Base Directory
 json_path = os.path.join(base_directory, "static", "imagenet_class_index.json") # Get the JSON path from the base_directory
+# model_path = os.path.join(base_directory, "static", "resnet50.pth")
 
 
 
 # model 
-model = models.get_model("densenet121", weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+model = resnet18(weights=ResNet18_Weights.IMAGENET1K_V1)
 model.eval()
 
 #imagenet classes for model

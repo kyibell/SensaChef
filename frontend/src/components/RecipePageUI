@@ -1,5 +1,0 @@
-function RecipePageUI() {
-    return <div>Recipe Page UI</div>;
-}
-export default RecipePageUI;
-

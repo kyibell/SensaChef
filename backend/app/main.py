@@ -1,11 +1,11 @@
 from fastapi import FastAPI
 from app.database import supabase
-from .routers import users, object_detection, camera, recipes
+from .routers import users, camera, recipes
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
 app.include_router(users.router)
-app.include_router(object_detection.router)
+# app.include_router(object_detection.router)
 app.include_router(camera.router)
 app.include_router(recipes.router)
 
@@ -14,7 +14,7 @@ origins = [
 ]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

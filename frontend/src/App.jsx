@@ -1,10 +1,17 @@
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
-import { AnimatePresence, motion } from 'framer-motion';
-import Home from './Pages/Home';
-import SignUp from './Pages/Sign-up';
-import CookingMode from './Pages/CookingMode';
-import Login from './Pages/Login';
-import Nav from './components/Navigation/Navbar'; 
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
+
+// Import components
+import Navbar from "./components/Navigation/Navbar"; 
+
+
+// Import pages
+import Home from "./Pages/Home"; 
+import SignUp from "./Pages/Sign-up";
+import CookingMode from "./Pages/CookingMode";
+import Login from "./Pages/Login";
+import RecipePage from "./components/RecipeDetail/RecipeDetail"; 
+import "./components/RecipePageUI/RecipePageUI.css";
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -23,7 +30,7 @@ const AnimatedRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-
+          <Route path="/recipes/:recipeName" element={<RecipePage />} />
           <Route path="/cookingmode/:recipeId" element={<CookingMode />} />
         </Routes>
       </motion.div>
@@ -34,8 +41,8 @@ const AnimatedRoutes = () => {
 function App() {
   return (
     <BrowserRouter>
-      <Nav />
-    	<AnimatedRoutes /> 
+      <Navbar />
+      <AnimatedRoutes />
     </BrowserRouter>
   );
 }
