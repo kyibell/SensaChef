@@ -56,7 +56,6 @@ mypy-extensions==1.0.0
 namex==0.0.8
 networkx==3.4.2
 numpy==2.2.4
-nvidia-pyindex==1.0.9
 opencv-python==4.10.0.84
 opencv-python-headless==4.10.0.84
 optree==0.14.0
