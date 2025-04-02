@@ -5,14 +5,18 @@ from torchvision import models # model import
 from PIL import Image # for image handling
 import json # for class names and json file
 import os # for paths
+import torch
 
 base_directory = os.path.dirname(os.path.abspath(__file__)) # Get the Base Directory
 json_path = os.path.join(base_directory, "static", "imagenet_class_index.json") # Get the JSON path from the base_directory
+model_path = os.path.join(base_directory, "static", "resnet50.pth")
 
 
 
 # model 
-model = models.get_model("densenet121", weights=models.DenseNet121_Weights.IMAGENET1K_V1)
+model = models.resnet50()
+state_dict = torch.load(model_path, map_location=torch.device("cpu"), weights_only=False)
+model.load_state_dict(state_dict, strict=False)
 model.eval()
 
 #imagenet classes for model
