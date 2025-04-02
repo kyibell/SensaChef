@@ -13,13 +13,24 @@ const RecipeDetail = () => {
 	useEffect(() => {
 		const fetchRecipeData = async () => {
 			try {
+				// for development
+				// const recipeRes = await fetch(
+				// 	`http://localhost:8000/recipes/name/${recipeName}`
+				// );
+				// for production
 				const recipeRes = await fetch(
-					`http://localhost:8000/recipes/name/${recipeName}`
+					`https://sensachef-backend.onrender.com/recipes/name/${recipeName}`
 				);
+				
 				const recipeData = await recipeRes.json();
-
+				
+				// // for development
+				// const stepsRes = await fetch(
+				// 	`http://localhost:8000/recipes/${recipeData.id}/steps`
+				// );
+				// for production
 				const stepsRes = await fetch(
-					`http://localhost:8000/recipes/${recipeData.id}/steps`
+					`https://sensachef-backend.onrender.com/recipes/${recipeData.id}/steps`
 				);
 				const stepsData = await stepsRes.json();
 
@@ -61,7 +72,7 @@ const RecipeDetail = () => {
 				)}
 			</ol>
 
-			{/* Cooking Start button */}
+			{/* Cooking start button */}
 			<div className="cooking-div">
 				<Link to={`/cookingmode/${recipe.id}`}>
 					<button className="cooking-button-mode">Start Cooking</button>
