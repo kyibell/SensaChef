@@ -10,10 +10,10 @@ function RecipeList() {
     const fetchRecipes = async () => {
       try {
         // for development
-        // const response = await fetch('http://localhost:8000/recipes');
+        const response = await fetch('http://localhost:8000/recipes');
 
         // for production
-        const response = await fetch('https://sensachef-backend.onrender.com/recipes');
+        // const response = await fetch('https://sensachef-backend.onrender.com/recipes');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
