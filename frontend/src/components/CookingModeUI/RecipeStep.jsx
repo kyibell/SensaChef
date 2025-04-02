@@ -41,7 +41,10 @@ function RecipeStep({ recipeId }) {
 
             try{
                 // fetch recipe's name
-                const recipeResponse = await fetch(`http://localhost:8000/recipes/${recipeId}`);
+                // for development
+                // const recipeResponse = await fetch(`http://localhost:8000/recipes/${recipeId}`);
+                // for production
+                const recipeResponse = await fetch(`https://sensachef-backend.onrender.com/recipes/${recipeId}`);
                 console.log("RECIPE RESPONSE: ", recipeResponse);
                 if (!recipeResponse.ok){
                     throw new Error('Recipe not found');
@@ -50,7 +53,10 @@ function RecipeStep({ recipeId }) {
                 setRecipeName(recipeData['recipe-name']);
 
                 // fetch step one
-                const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps`);
+                // for development
+                // const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps`);
+                // for production
+                const stepsResponse = await fetch(`https://sensachef-backend.onrender.com/recipes/${recipeId}/steps`);
                 console.log("STEPS RESPONSE: ", stepsResponse.status);
                 
                 if (!stepsResponse.ok){
