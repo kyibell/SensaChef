@@ -28,7 +28,7 @@ router = APIRouter()
 # Camera Class
 class Camera:
     def __init__(self):
-        self.video = cv2.VideoCapture(1) # 0 for webcam access
+        self.video = cv2.VideoCapture(0) # 0 for webcam access
         if not self.video.isOpened():
             raise RuntimeError("Camera could not be opened.")
         self.socket = None # Sets when the connection is initalized

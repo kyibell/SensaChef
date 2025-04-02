@@ -1,0 +1,25 @@
+import { useState, useEffect } from "react";
+
+const timerSound = new Audio("/sounds/timer.mp3"); // Move outside to avoid re-creating it
+
+const Timer = ({ initialTime }) => {
+  const [timeLeft, setTimeLeft] = useState(initialTime);
+
+  useEffect(() => {
+    if (timeLeft === 0) {
+      timerSound.play().catch((error) => console.error("Audio play failed", error));
+    }
+  }, [timeLeft]);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft((prevTime) => Math.max(prevTime - 1, 0));
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
+
+  return <div>Time Left: {timeLeft} seconds</div>;
+};
+
+export default Timer;

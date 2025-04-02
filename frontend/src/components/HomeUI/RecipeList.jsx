@@ -1,26 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import RecipeCard from './RecipeCard';
-//import { useNavigate } from 'react-router-dom';
-import './RecipeList.css';
-
+import { useNavigate } from 'react-router-dom';
 function RecipeList() {
     const [recipes, setRecipes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-//    const navigate = useNavigate();
+    const navigate = useNavigate();
     useEffect(() => {
         const fetchRecipes = async () => {
             try {
-                //const response = await fetch('http://localhost:8000/recipes');
-                const response = await  fetch('http://localhost:8000/recipes', { mode: 'cors' });
+                const response = await fetch('http://localhost:8000/recipes');
                 if(!response.ok) {
-                    //throw new Error('Network response was not ok');
-                    throw new Error(`Server error: ${response.status}`);
+                    throw new Error('Network response was not ok');
                 }
                 const data = await response.json();
-                console.log("API Response (Check image_url):", data);
+                console.log("API Response: ", data);
                 setRecipes(data);
-//                setError(null);
+                setError(null);
             } catch (err) {
                 setError(err.message);
                 console.log("Fetch error details: ", err)
@@ -29,15 +24,14 @@ function RecipeList() {
             }
         };
 
-        fetchRecipes();
-    }, []);
+    fetchRecipes();
+  }, []);
 
     if(loading) return <div>Loading...</div>;
-//    if(error) return <div>Errror: {error}</div>;
-    if (error) return <div style={{ color: "red" }}>Error: {error}</div>;
+    if(error) return <div>Errror: {error}</div>;
 
     return (
-/*        <div>
+        <div>
             <h1>Recipes</h1>
             <ul>
                 {recipes.map((recipe) => (
@@ -50,12 +44,7 @@ function RecipeList() {
                     </li>
                 ))}
             </ul>
-        </div>*/
-        <div className="recipe-list">
-            {recipes.map((recipe) => (
-                <RecipeCard key={recipe.id} recipe={recipe}/>
-            ))}
         </div>
     );
 }
-export default RecipeList;
+export default RecipeList
