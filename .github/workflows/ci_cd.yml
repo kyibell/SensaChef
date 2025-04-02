@@ -70,7 +70,7 @@ jobs:
     #### 
         - name: Build Docker Image
           run: |
-            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend_flask:latest .
+            docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/backend_fastapi:latest .
             # make sure that your dockerhub repo name matches as this line (backend_flask)
             
     # Step 8: # Log in to Docker Hub
@@ -81,4 +81,4 @@ jobs:
     # Step 8: Push docker image to dockerhub
     ####
         - name: Push Docker Image
-          run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend_flask:latest
+          run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/backend_fastapi:latest
