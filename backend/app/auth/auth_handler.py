@@ -29,5 +29,5 @@ class JWTBearer(HTTPBearer):
         try:
             jwt.decode(jwtoken, JWT_SECRET, algorithms=["HS256"], audience="authenticated")
             return True
-        except:
+        except jwt.PyJWTError:
             return False
