@@ -42,7 +42,7 @@ function AiModel() {
 
       {loading && <p>Loading...</p>}
       {response && (
-        <div style={{ marginTop: "1rem", border: "1px solid #ccc", padding: "1rem" }}>
+        <div className="Ai-response">
           <strong>Response:</strong>
           <p>{response}</p>
         </div>
