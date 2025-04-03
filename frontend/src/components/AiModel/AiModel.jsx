@@ -1,4 +1,4 @@
-import './Aimodel.css';
+import './AiModel.css';
 import { useState } from "react";
 
 function AiModel() {
