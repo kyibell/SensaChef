@@ -13,4 +13,3 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_ANON_KEY)
 # Admin client for privileged operations (e.g., deleting a user)
 admin_supabase: Client = create_client(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY)
 
-

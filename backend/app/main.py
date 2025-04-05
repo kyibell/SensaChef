@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 from app.database import supabase
-from .routers import users, camera, recipes, object_detection, ask
+from .routers import users, camera, recipes, ask
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
 
 app = FastAPI()
 app.include_router(users.router)
-app.include_router(object_detection.router)
 app.include_router(camera.router)
 app.include_router(recipes.router)
 app.include_router(ask.router)
