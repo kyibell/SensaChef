@@ -33,7 +33,7 @@ async def parse_intent(data: VoiceInput):
     )
 
     content = response.choices[0].message.content.strip()
-    print("🧠 OpenAI response:", content)
+    print("OpenAI response:", content)
 
     try:
         return json.loads(content)

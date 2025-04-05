@@ -21,7 +21,6 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
       utterance.onend = () => resolve();
       synth.speak(utterance);
     }).then(() => {
-      console.log("Navigating now:", path); // Debug purposes
       navigate(path);
     });
   };
@@ -33,7 +32,6 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
       lastHandledTranscript.current = transcript;
       handled.current = false;
 
-      console.log("Stable Transcript:", transcript); // Debug purposes
       SpeechRecognition.stopListening();
       resetTranscript();
 
@@ -43,21 +41,18 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
             text: transcript,
           });
 
-          console.log("AI Response:", res.data); // Debugging
-
           let intent, target;
           try {
             const parsed = typeof res.data === "string" ? JSON.parse(res.data) : res.data;
             intent = parsed.intent;
             target = parsed.target;
           } catch (err) {
-            console.error("Parsing error:", err); // Debugging
             speak("Sorry, I couldn't understand that.");
             return;
           }
 
-          console.log("✅ Parsed Intent:", intent);
-          console.log("✅ Parsed Target:", target);
+          console.log("Parsed Intent:", intent);
+          console.log("Parsed Target:", target);
 
           // Navigate
           if (intent?.toLowerCase() === "navigate" && typeof target === "string") {
@@ -69,7 +64,6 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
 
             const path = `/${cleaned}`;
             if (location.pathname === path) {
-              console.log("Already on this page"); // Debugging
               return;
             }
 
@@ -104,7 +98,7 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
             }
           }
 
-          // ⬅Go back
+          // Go back
           else if (intent?.toLowerCase() === "go_back") {
             speak("Going back");
             navigate(-1);
@@ -114,7 +108,6 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
           // Logout
           else if (intent?.toLowerCase() === "logout") {
             speak("Logging you out");
-            // Add logout logic here if needed
             handled.current = true;
           }
 
@@ -123,7 +116,6 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
           }
 
         } catch (err) {
-          console.error("AI Nav error:", err); // Debugging
           speak("Something went wrong while processing.");
         } finally {
           if (!handled.current) {
