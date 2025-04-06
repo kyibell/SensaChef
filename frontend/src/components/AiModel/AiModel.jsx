@@ -6,6 +6,26 @@ function AiModel() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
 
+  // Speak the geenrated response
+  const speak = (text) => {
+    if ('speechSynthesis' in window) {
+      const voices = window.speechSynthesis.getVoices();
+      const enUSVoice = voices.find(voice => voice.lang === 'en-US');
+
+      if (enUSVoice) {
+        window.speechSynthesis.cancel(); // if any prior speech detected, cancel it
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.voice = enUSVoice;
+        window.speechSynthesis.speak(utterance);
+      }
+      else {
+        console.warn('Voice is not available');
+      }
+    }
+    else {
+      console.warn('tts error');
+    }
+  }
   const AiModel = async () => {
     setLoading(true);
     setResponse("");
