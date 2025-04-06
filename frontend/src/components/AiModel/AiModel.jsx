@@ -1,5 +1,5 @@
 import './AiModel.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 function AiModel() {
   const [question, setQuestion] = useState("");
@@ -25,7 +25,19 @@ function AiModel() {
     else {
       console.warn('tts error');
     }
-  }
+  };
+
+  useEffect(() => {
+    if ('speechSynthesis' in window){
+      // force the browser to load the voices when a component mounts
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {};
+      return () => {
+        window.speechSynthesis.onvoiceschanged = null;
+      }
+    }
+  }, []);
+    
   const AiModel = async () => {
     setLoading(true);
     setResponse("");
