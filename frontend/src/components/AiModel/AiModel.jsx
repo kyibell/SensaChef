@@ -37,7 +37,7 @@ function AiModel() {
       }
     }
   }, []);
-    
+
   const AiModel = async () => {
     setLoading(true);
     setResponse("");
@@ -49,9 +49,13 @@ function AiModel() {
         body: JSON.stringify({ prompt: question }),
       });
       const data = await res.json();
-      setResponse(data.response || data.error || "No response received.");
+      const AIResponse = data.response || data.error || "No response received."
+      setResponse(AIResponse);
+      speak(AIResponse);
     } catch (error) {
-      setResponse("Error: " + error.message);
+      const errorResponse = "Error: " + error.message;
+      setResponse(errorResponse);
+      speak(errorResponse);
     }
 
     setLoading(false);
