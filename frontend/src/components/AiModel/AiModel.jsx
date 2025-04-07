@@ -31,10 +31,6 @@ function AiModel() {
     if ('speechSynthesis' in window){
       // force the browser to load the voices when a component mounts
       window.speechSynthesis.getVoices();
-      window.speechSynthesis.onvoiceschanged = () => {};
-      return () => {
-        window.speechSynthesis.onvoiceschanged = null;
-      }
     }
   }, []);
   // Handle speech input
