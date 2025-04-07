@@ -1,6 +1,6 @@
 import './AiModel.css';
 import { useEffect, useState } from "react";
-
+import VoiceInput from '../Speech/stt';
 function AiModel() {
   const [question, setQuestion] = useState("");
   const [response, setResponse] = useState("");
@@ -37,6 +37,11 @@ function AiModel() {
       }
     }
   }, []);
+  // Handle speech input
+  const handleSpeechInput = (transcript) => {
+    setQuestion(transcript);
+  };
+  
 
   const AiModel = async () => {
     setLoading(true);
@@ -72,6 +77,10 @@ function AiModel() {
         onChange={(e) => setQuestion(e.target.value)}
         placeholder="Ask a cooking question..."
         className="Ai-input"
+      />
+      <VoiceInput 
+        onTranscriptUpdate={handleSpeechInput}
+        showTextArea={false}
       />
       <button className='Ai-ask-button' onClick={AiModel}>Ask</button>
       </div>
