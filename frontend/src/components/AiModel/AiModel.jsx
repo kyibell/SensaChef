@@ -47,6 +47,13 @@ function AiModel() {
     setLoading(true);
     setResponse("");
 
+    if(!question) {
+      const noPromptResponse = "Please enter a prompt";
+      setResponse(noPromptResponse);
+      setLoading(false);
+      speak(noPromptResponse);
+      return;
+    }
     try {
       const res = await fetch("http://localhost:8000/api/ask", {
         method: "POST",
