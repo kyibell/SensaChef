@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # Job 1: Filter changed files and set outputs for backend and frontend changes
@@ -65,10 +65,12 @@ jobs:
 
       # Deploy the backend via a webhook
       - name: Deploy Backend
+        if: github.ref == 'refs/heads/main'
+        # Only run this step if the branch is main
         env:
           deploy_url: ${{ secrets.BACKEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
 
   # Job 3: Run frontend deployment if frontend files changed
   frontend_deploy:
@@ -82,7 +84,8 @@ jobs:
       # Add any frontend build/test steps if needed.
       # For now, we just deploy via the webhook.
       - name: Deploy Frontend
+        if: github.ref == 'refs/heads/main'
         env:
           deploy_url: ${{ secrets.FRONTEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
