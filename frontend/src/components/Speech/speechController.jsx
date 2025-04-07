@@ -54,6 +54,7 @@ function SpeechController({ stepText, onNextStep, onPreviousStep }) {
                 onRepeat={repeat}
                 onNextStep={onNextStep}
                 onPreviousStep={onPreviousStep}
+                showTextArea={true}
             />
         </div>
     );
