@@ -39,7 +39,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10.16"
+          python-version: "3.13"
 
       - name: Install backend dependencies
         working-directory: backend
@@ -57,12 +57,9 @@ jobs:
           fi
 
       - name: Run Python tests
+        working-directory: backend/app/backend_tests
         run: |
-          if [ -f pytest.ini ] || ls tests; then
-            pytest
-          else
-            echo "No tests found, skipping tests."
-          fi
+          pytest --cov=.. --cov-fail-under=80 test_backend.py
 
       # Deploy the backend via a webhook
       - name: Deploy Backend
@@ -85,13 +82,15 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '23'
+          node-version: '23.11.0'
 
       # Add any frontend build/test steps if needed.
       - name: Install Frontend Dependencies
         working-directory: frontend
         run: |
           npm ci
+          npm run build --if-present
+
 
       # For now, we just deploy via the webhook.
       - name: Deploy Frontend
