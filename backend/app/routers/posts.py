@@ -74,8 +74,14 @@ async def create_post(post: Post):
     pass
 
 # Update Post
+@router.put("/update_post/{post_id}", tags=["posts"])
+async def update_post():
+    pass
 
 # Delete a Post
+@router.delete("/delete_post/{post_id}", tags=["posts"])
+async def delete_post():
+    pass
 
     
 
