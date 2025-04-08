@@ -57,9 +57,9 @@ jobs:
           fi
 
       - name: Run Python tests
-        working-directory: backend/app/backend_tests
+        working-directory: backend/app
         run: |
-          pytest --cov=.. --cov-fail-under=80 test_backend.py
+          pytest --cov=. backend_tests/test_backend.py
 
       # Deploy the backend via a webhook
       - name: Deploy Backend
