@@ -57,8 +57,11 @@ jobs:
           fi
 
       - name: Run Python tests
+        working-directory: backend
+        env:
+          PYTHONPATH: ${{ github.workspace }}/backend
         run: |
-          pytest --cov=backend/app backend/app/backend_tests/test_backend.py
+          pytest --cov=app app/backend_tests/test_backend.py
 
       # Deploy the backend via a webhook
       - name: Deploy Backend
