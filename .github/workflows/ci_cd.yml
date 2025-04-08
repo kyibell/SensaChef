@@ -41,7 +41,8 @@ jobs:
         with:
           python-version: "3.10.16"
 
-      - name: Install Python dependencies
+      - name: Install backend dependencies
+        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -81,7 +82,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
       # Add any frontend build/test steps if needed.
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: |
+          npm ci
+
       # For now, we just deploy via the webhook.
       - name: Deploy Frontend
         if: github.ref == 'refs/heads/main'
