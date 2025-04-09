@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import supabase
-from .routers import users, camera, recipes, ask, posts, comments
+from .routers import users, AiNav, recipes, ask, posts, comments
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
@@ -11,6 +11,7 @@ app.include_router(recipes.router)
 app.include_router(ask.router)
 app.include_router(posts.router)
 app.include_router(comments.router)
+app.include_router(AiNav.router)
 
 origins = [
     "http://localhost:3000"
