@@ -14,24 +14,24 @@ const RecipeDetail = () => {
 		const fetchRecipeData = async () => {
 			try {
 				// for development
-				const recipeRes = await fetch(
-					`http://localhost:8000/recipes/name/${recipeName}`
-				);
+				//const recipeRes = await fetch(
+					//`http://localhost:8000/recipes/name/${recipeName}`
+			//	);
 				// for production
-				// const recipeRes = await fetch(
-				// 	`https://sensachef-backend.onrender.com/recipes/name/${recipeName}`
-				// );
+				const recipeRes = await fetch(
+					`https://sensachef-backend.onrender.com/recipes/name/${recipeName}`
+				);
 				
 				const recipeData = await recipeRes.json();
 				
 				// // for development
-				const stepsRes = await fetch(
-					`http://localhost:8000/recipes/${recipeData.id}/steps`
-				);
+			//	const stepsRes = await fetch(
+				//	`http://localhost:8000/recipes/${recipeData.id}/steps`
+			//	);
 				// for production
-				// const stepsRes = await fetch(
-				// 	`https://sensachef-backend.onrender.com/recipes/${recipeData.id}/steps`
-				// );
+				const stepsRes = await fetch(
+				`https://sensachef-backend.onrender.com/recipes/${recipeData.id}/steps`
+				);
 				
 				const stepsData = await stepsRes.json();
 
