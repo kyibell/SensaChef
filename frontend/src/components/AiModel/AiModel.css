@@ -3,6 +3,7 @@
     flex-direction: column;
     align-items: center;
     color: white;
+    margin-top: 40px;
 }
 .ai-input-button {
     margin-top: -10px;
@@ -27,6 +28,7 @@
     width: 250px;
     margin-bottom: 20px;
     border-style: solid;
+    color: white;
 }
 .Ai-response {
     margin-top: 25px;
