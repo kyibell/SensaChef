@@ -1,22 +1,19 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 from app.database import supabase, admin_supabase
-from pydantic import BaseModel
-from typing import List 
-from uuid import UUID, uuid4
+from pydantic import BaseModel, Field 
+from uuid import UUID
 import pydantic
 
 
 router = APIRouter() # Define the Router for defining routes
 
 class Post(BaseModel): # Model for Posts
-    id: int
-    created_at: datetime
-    post_text: str
-    post_image: str
-    is_solved: bool
-    post_tags: List[str]
-    user_id: UUID = uuid4()
+    post_title: str = Field(..., min_length=5, description="title of the post")
+    post_text: str = Field(..., min_length=1, max_length=1000, description="The content of the post")
+    post_image: str = Field(..., description="The image URL of the Post")
+    post_tags: list[str] = Field(..., min_length=1, description="Tags assigned to the post")
+    user_id: UUID  = Field(...,description="The User ID Creating the post")
 
 
 # Get All Posts
@@ -70,19 +67,53 @@ async def get_users_post(user_id: UUID):
 
 
 # Create a Post
-@router.post("/create_post", tags=["posts"])
-async def create_post(post: Post):
-    pass
+@router.post("/{user_id}/create_post", tags=["posts"], status_code=201) 
+async def create_post(post: Post, user_id: UUID):
+    try:
+        creation_date = datetime.now().isoformat() + "Z" # Iso format is what supabase uses
+
+        db_user = supabase.table("users").select("*").eq("id", user_id) # Check for user existance
+        if not db_user:
+            raise HTTPException(status_code=404, detail="User not found.")
+        post_data = { # Put the data in an object
+            "created_at": creation_date, 
+            "post_title": post.post_title,
+            "post_image": post.post_image if post.post_image else None,
+            "post_tags": post.post_tags,
+            "user_id": str(post.user_id) # Convert to Str bc Supabase Can't read in the UUID Obj.
+        }
+
+        response = supabase.table("posts").insert(post_data).execute() # Run Insertion
+
+        if response:
+            return response # Return response if successful
+        else:
+            raise HTTPException(status_code=400,detail="Error creating post.")
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+        print(error)
+
 
 # Update Post
 @router.put("/update_post/{post_id}", tags=["posts"])
-async def update_post():
-    pass
+async def update_post(post_id: int, post: Post):
+    try:
+        post = supabase.table("posts").update({"post_title": post.post_title,
+                                           "post_text": post.post_text,
+                                           "post_image": post.post_image
+                                           }).eq("id", post_id).execute()
+        return post.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 # Delete a Post
 @router.delete("/delete_post/{post_id}", tags=["posts"])
-async def delete_post():
-    pass
+async def delete_post(post_id: int):
+    try:
+        post = supabase.table("posts").delete().eq("id", post_id).execute()
+        return {"message": "Post deleted successfully."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
     
 

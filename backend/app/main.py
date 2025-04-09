@@ -13,6 +13,7 @@ app.include_router(ask.router)
 app.include_router(posts.router)
 app.include_router(AiNav.router)
 app.include_router(comments.router)
+
 origins = [
     "http://localhost:3000"
 ]

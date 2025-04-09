@@ -1,24 +1,78 @@
 from fastapi import APIRouter, HTTPException
-from app.database import supabase
+from datetime import datetime
+from app.database import supabase, admin_supabase
+from pydantic import BaseModel
+from uuid import UUID
 
-router = APIRouter() 
+class Comment(BaseModel): # Model for Comments for Validation
+    created_at: datetime
+    comment: str
+    post_id: int
+    user_id: UUID
+    rating: float
+    is_helpful: bool
 
-# COMMENTS ROUTES
+router = APIRouter()
 
-# Get a specific post's comments
-@router.get("/posts/{post_id}/comments", tags=["posts"])
-async def get_post_comments(post_id: int) :
+
+# Get All Comments
+@router.get("/{post_id}/comments", tags=["comments"],status_code=200)
+async def get_all_comments(post_id: int):
     try:
-        response = (supabase.table("comments")
-                    .select("*, users(username)")
-                    .eq("post_id", post_id)
-                    .order("created_at", desc=True) # Newest comments first
-                    .execute()
+        response = (
+            supabase.table("comments").select("*").eq("post_id", post_id).execute()
         )
 
         if not response.data:
-            return [] # No comments
-            
+            raise HTTPException(status_code=404, detail="No comments found for this post.")
+        return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=error)
+    
+# Get a specific Comment
+@router.get("/comment/{comment_id}", tags=["comments"],status_code=200)
+async def get_comment(comment_id: int):
+    try:
+        if comment_id:
+            response = (
+                supabase.table("comments")
+                .select("*")
+                .eq("id", comment_id)
+                .execute()
+            )
+        if not response:
+            raise HTTPException(status_code=404, detail="Comment Not Found.")
+        return response.data[0]
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
+# Get a Specific User's Comment(s)
+@router.get("/{user_id}/comment", tags=["comments"])
+async def get_user_comment(user_id: UUID):
+    try:
+        response = (
+            supabase.table("comments")
+            .select("*")
+            .eq("user_id", user_id)
+            .execute()
+        )
+        if not response:
+            raise HTTPException(status_code=404, detail="User has no comments.")
         return response.data
     except Exception as error:
         raise HTTPException(status_code=500, detail="Internal Server Error")
+    
+
+# Create A Comment
+@router.post('/{post_id}/create_comment',tags=["comments"])
+async def create_comment():
+    pass
+
+# Update A Comment
+@router.put('update_comment/{comment_id}', tags=["comments"])
+async def update_comment():
+    pass
+# Delete A Comment
+@router.delete('/delete_comment/{comment_id}', tags=["comments"])
+async def delete_comment():
+    pass
