@@ -6,6 +6,14 @@ function PostList() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // truncate post descriptions that are too short
+  const shortenText = (text, maxLength = 100) => {
+    if (!text) return '';
+    if (text.length <= maxLength) return text;
+
+    return `${text.substring(0, maxLength)}...`;
+  }
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
@@ -41,9 +49,33 @@ function PostList() {
                         <Link
                             to={`/posts/${post.id}`}
                         >
-                        {post['post_text']}
-                        </Link></h2>
-                    <p>{post.user_id}</p>
+                        {post['post_title']}
+                        </Link>
+                    </h2>
+                    <p>{shortenText(post.post_text)}</p>
+                    <p>By {post.user_id}</p>
+                    <span style={{
+                        color: post.is_solved ? "green" : "red",
+                    }}>{post.is_solved ? 'Solved' : 'Unsolved'}</span>
+                    
+                    {post.post_tags?.length > 0 && (
+                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '10px' }}>
+                            {post.post_tags.map((tag, index) => (
+                            <span 
+                                key={index}
+                                style={{
+                                backgroundColor: '#e0e0e0',
+                                color: '#333',
+                                padding: '3px 8px',
+                                borderRadius: '12px',
+                                fontSize: '0.8em'
+                                }}
+                            >
+                                {tag}
+                            </span>
+                            ))}
+                        </div>
+                    )}
                 </li>
             ))}
         </ul>
