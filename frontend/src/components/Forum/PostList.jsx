@@ -17,7 +17,12 @@ function PostList() {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const response = await fetch('http://localhost:8000/posts');
+        // for dev
+        // const response = await fetch('http://localhost:8000/posts');
+
+        // for prod
+        const response = await fetch(`https://sensachef-backend.onrender.com/posts`);
+        
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

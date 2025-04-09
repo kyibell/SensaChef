@@ -15,7 +15,14 @@ function Post({}) {
 
             try{
                 // Fetch post data
-                const postResponse = await fetch(`http://localhost:8000/posts/${post_id}`);
+                
+                // for dev
+                // const postResponse = await fetch(`http://localhost:8000/posts/${post_id}`);
+
+                // for prod
+                const postResponse = await fetch(`https://sensachef-backend.onrender.com/posts/${[post_id]}`);
+
+                
                 if (!postResponse.ok){
                     throw new Error('Post not found');
                 }
@@ -23,7 +30,13 @@ function Post({}) {
                 setPost(postData);
 
                 // Fetch comments of this post
-                const commentsResponse = await fetch(`http://localhost:8000/${post_id}/comments`);
+
+                // for dev
+                // const commentsResponse = await fetch(`http://localhost:8000/${post_id}/comments`);
+
+                // for prod
+                const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
+
                 if(!commentsResponse.ok){
                     throw new Error('Failed to fetch comments');
                 }
