@@ -12,6 +12,7 @@ router = APIRouter() # Define the Router for defining routes
 class Post(BaseModel): # Model for Posts
     id: int
     created_at: datetime
+    post_title: str
     post_text: str
     post_image: str
     is_solved: bool
@@ -69,19 +70,51 @@ async def get_users_post(user_id: UUID):
 
 
 # Create a Post
-@router.post("/create_post", tags=["posts"])
-async def create_post(post: Post):
-    pass
+@router.post("/{user_id}/create_post", tags=["posts"])
+async def create_post(post: Post, user_id: UUID):
+    try:
+        post_id = post.id
+        post_content = post.post_text
+        post_img = post.post_image
+        post_tags = post.post_tags
+        title = post.post_title
+        db_user = supabase.table("users").select("*").eq("id", user_id)
+        if not db_user:
+            raise HTTPException(status_code=404, detail="User not found.")
+        post = supabase.table("posts").insert({ 
+            "id": post_id, "post_title": title,
+                                                "post_text": post_content,
+                                                  "post_image": post_img,
+                                                    "user_id": user_id }).execute()
+
+        if post:
+            return {"message": "Post created successfully."}
+        else:
+            return {"message": "Post creation failed."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error.")
+
 
 # Update Post
 @router.put("/update_post/{post_id}", tags=["posts"])
-async def update_post():
-    pass
+async def update_post(post_id: int, post: Post):
+    try:
+        post = supabase.table("posts").update({"post_title": post.post_title,
+                                           "post_text": post.post_text,
+                                           "post_image": post.post_image
+                                           }).eq("id", post_id).execute()
+        return post.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 # Delete a Post
 @router.delete("/delete_post/{post_id}", tags=["posts"])
-async def delete_post():
-    pass
+async def delete_post(post_id: int):
+    try:
+        post = supabase.table("posts").delete().eq("id", post_id).execute()
+        return {"message": "Post deleted successfully."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
     
 
