@@ -5,14 +5,16 @@ function Post({}) {
 
     const {post_id} = useParams();
     const [post, setPost] = useState(null);
+    const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect( () => {
 
-        const fetchPostData = async () => {
+        const fetchPostAndComments = async () => {
 
             try{
+                // Fetch post data
                 const postResponse = await fetch(`http://localhost:8000/posts/${post_id}`);
                 if (!postResponse.ok){
                     throw new Error('Post not found');
@@ -20,6 +22,13 @@ function Post({}) {
                 const postData = await postResponse.json();
                 setPost(postData);
 
+                // Fetch comments of this post
+                const commentsResponse = await fetch(`http://localhost:8000/posts/${post_id}/comments`);
+                if(!commentsResponse.ok){
+                    throw new Error('Failed to fetch comments');
+                }
+                const commentsData = await commentsResponse.json();
+                setComments(commentsData);
             } catch (err) {
                 console.log("Fetch failed: ", err);
                 setError(err.message);
@@ -27,7 +36,7 @@ function Post({}) {
                 setLoading(false);
             }
         } ;
-        fetchPostData();
+        fetchPostAndComments();
     }, [post_id]);
 
     if (loading) return <div>Loading...</div>;
@@ -35,36 +44,60 @@ function Post({}) {
     if (!post) return <div>Post not found</div>;
 
     return (
-        <div className="post-detail">
-            <span style={{
-                        color: post.is_solved ? "green" : "red",
-                    }}>{post.is_solved ? 'Solved' : 'Unsolved'}
-            </span>
-            <h1>{post.post_title}</h1>
-            <p>{post.post_text}</p>
-            <p>Posted by: {post.users?.username || 'Unkown user'}</p>
+        <div className="post">
+            <div className="post-detail">
+                <span style={{
+                            color: post.is_solved ? "green" : "red",
+                        }}>{post.is_solved ? 'Solved' : 'Unsolved'}
+                </span>
+                <h1>{post.post_title}</h1>
+                <p>{post.post_text}</p>
+                <p>Posted by: {post.users?.username || 'Unkown user'}</p>
 
-            {post.post_image && (
-                <img src={post.post_image} alt={post.post_title} />
-            )}
-            {post.post_tags?.length > 0 && (
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '10px' }}>
-                            {post.post_tags.map((tag, index) => (
-                            <span 
-                                key={index}
-                                style={{
-                                backgroundColor: '#e0e0e0',
-                                color: '#333',
-                                padding: '3px 8px',
-                                borderRadius: '12px',
-                                fontSize: '0.8em'
-                                }}
-                            >
-                                {tag}
-                            </span>
-                            ))}
+                {post.post_image && (
+                    <img src={post.post_image} alt={post.post_title} />
+                )}
+                {post.post_tags?.length > 0 && (
+                            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '5px', marginTop: '10px' }}>
+                                {post.post_tags.map((tag, index) => (
+                                <span 
+                                    key={index}
+                                    style={{
+                                    backgroundColor: '#e0e0e0',
+                                    color: '#333',
+                                    padding: '3px 8px',
+                                    borderRadius: '12px',
+                                    fontSize: '0.8em'
+                                    }}
+                                >
+                                    {tag}
+                                </span>
+                                ))}
+                            </div>
+                )}
+            </div>
+
+            <div className="comments">
+                <h2>Comments: {comments.length}</h2>
+
+                {comments.length > 0 ? (
+                    comments.map(comment => (
+                        <div className="comment">
+                            <div className="comment-info">
+                                <strong>{comment.user_id}</strong>
+                                <span>{new Date(comment.created_at).toLocaleString()}</span>
+                            </div>
+                            <p>{comment.comment}</p>
+                            <div className="comment-foot">
+                                <span>Rating: {comment.rating}/5</span>
+                                <span>{comment.is_helpful ? 'Helpful' : ''}</span>
+                            </div>
                         </div>
-            )}
+                    ))
+                ) : (
+                    <p>No comments yet...</p>
+                )}
+            </div>
         </div>
     )
 }

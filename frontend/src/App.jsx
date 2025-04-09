@@ -38,6 +38,7 @@ const AnimatedRoutes = () => {
           <Route path="/help" element={<Help />} />
           <Route path="/posts" element={<PostList />} />
           <Route path="/posts/:post_id" element={<Post />} />
+          <Route path="posts/:post_id/comments" element={<Post />}/>
         </Routes>
       </motion.div>
     </AnimatePresence>
