@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import supabase
-from .routers import users, camera, recipes, ask, AiNav, posts, comments
+from .routers import users, recipes, ask, AiNav, posts, comments
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
