@@ -33,7 +33,7 @@ const AnimatedRoutes = () => {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/recipes/:recipeName" element={<RecipePage />} />
           <Route path="/cookingmode/:recipeId" element={<CookingMode />} />
-          <Route path="/Help" element={<Help />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

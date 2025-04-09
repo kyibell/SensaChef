@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react'
 import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
 import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
+import Microphone from '../../assets/Microphone.svg';
 
-function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
+function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep, onTranscriptUpdate, showTextArea }) {
     const [textInput, setTextInput] = useState('');
     const enUSVoice = useTextToSpeech();
     const commandExecutedRef = useRef(false);
@@ -62,6 +63,14 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
         continuous: true,
         commandHandler: handleCommand,
     });
+
+    useEffect(() => {
+        if (transcript && onTranscriptUpdate){
+            onTranscriptUpdate(transcript);
+            setTextInput(transcript);
+        }
+    }, [transcript, onTranscriptUpdate]);
+
     const startStopListening = () => {
         if (isListening){
             stopVoiceInput();
@@ -81,22 +90,31 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep }) {
 
     const showListening = isListening && !forceStop;
     return (
-        <div className="speech-section">
-            <h1>Speech to Text</h1>
-            <textarea
-                disabled={isListening}
-                value={isListening ? textInput + (transcript ? (textInput ? ' ' : '') + transcript : '') : textInput}
-                onChange={(e) => setTextInput(e.target.value)}
-            />
-            <button onClick={startStopListening}>
-                {showListening ? 'Stop Listening' : 'Speak'}
-            </button>
-            {forceStop && (
-                <div>
-                    Command processed - mic off
+        <>
+            {showTextArea ? (
+                <div className="speech-section">
+                    <h1>Speech to Text</h1>
+                    <textarea
+                        disabled={isListening}
+                        value={isListening ? textInput + (transcript ? (textInput ? ' ' : '') + transcript : '') : textInput}
+                        onChange={(e) => setTextInput(e.target.value)}
+                    />
+                    <button onClick={startStopListening}>
+                        {showListening ? 'Stop Listening' : 'Speak'}
+                    </button>
+                    {forceStop && (
+                        <div>
+                            Command processed - mic off
+                        </div>
+                    )}
                 </div>
+            ) : (
+                <button onClick={startStopListening}>
+                    <img src={Microphone}/>
+                </button>
             )}
-        </div>
+
+        </>
     );
     
 }
