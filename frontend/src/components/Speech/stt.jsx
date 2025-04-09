@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
 import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 import Microphone from '../../assets/Microphone.svg';
-import './speechController.css';
+import './SpeechController.css';
 
 function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep, onTranscriptUpdate, showTextArea }) {
     const [textInput, setTextInput] = useState('');
