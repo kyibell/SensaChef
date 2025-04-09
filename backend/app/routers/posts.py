@@ -1,9 +1,8 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 from app.database import supabase, admin_supabase
-from pydantic import BaseModel, Field
-from typing import List 
-from uuid import UUID, uuid4
+from pydantic import BaseModel, Field 
+from uuid import UUID
 import pydantic
 
 
@@ -67,28 +66,28 @@ async def get_users_post(user_id: UUID):
 
 
 # Create a Post
-@router.post("/{user_id}/create_post", tags=["posts"], status_code=201) # Weird Bug, getting Internal Server error 
+@router.post("/{user_id}/create_post", tags=["posts"], status_code=201) 
 async def create_post(post: Post, user_id: UUID):
     try:
-        creation_date = datetime.now().isoformat() + "Z"
+        creation_date = datetime.now().isoformat() + "Z" # Iso format is what supabase uses
 
-        db_user = supabase.table("users").select("*").eq("id", user_id)
+        db_user = supabase.table("users").select("*").eq("id", user_id) # Check for user existance
         if not db_user:
             raise HTTPException(status_code=404, detail="User not found.")
-        post_data = {
-            "created_at": creation_date,
+        post_data = { # Put the data in an object
+            "created_at": creation_date, 
             "post_title": post.post_title,
             "post_image": post.post_image if post.post_image else None,
             "post_tags": post.post_tags,
-            "user_id": str(post.user_id)
+            "user_id": str(post.user_id) # Convert to Str bc Supabase Can't read in the UUID Obj.
         }
-        
-        response = supabase.table("posts").insert(post_data).execute()
+
+        response = supabase.table("posts").insert(post_data).execute() # Run Insertion
 
         if response:
-            return response
+            return response # Return response if successful
         else:
-            raise HTTPException(status_code=400,detail="Error inserting post: ", headers=response.error)
+            raise HTTPException(status_code=400,detail="Error creating post.")
     except Exception as error:
         raise HTTPException(status_code=500, detail="Internal Server Error")
         print(error)
