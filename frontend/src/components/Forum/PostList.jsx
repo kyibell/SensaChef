@@ -37,10 +37,12 @@ function PostList() {
         <ul>
             {posts.map((post) => (
                 <li key={post.id}>
-                    <h2
-                        style={{cursor: 'pointer'}}
-                        onClick={() => navigate(`/posts/${post.id}`)}
-                        >{post['post_text']}</h2>
+                    <h2 style={{cursor: 'pointer'}}>
+                        <Link
+                            to={`/posts/${post.id}`}
+                        >
+                        {post['post_text']}
+                        </Link></h2>
                     <p>{post.user_id}</p>
                 </li>
             ))}
