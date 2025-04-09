@@ -37,10 +37,15 @@ const AiNav = ({ transcript, listening, startListening, resetTranscript, speak }
 
       const parseIntent = async () => {
         try {
-          const res = await axios.post("http://localhost:8000/api/AiNav/", {
+          // for development
+          // const res = await axios.post("http://localhost:8000/api/AiNav/", {
+          //   text: transcript,
+          // });
+          // https://sensachef-backend.onrender.com/
+          // for production
+          const res = await axios.post("https://sensachef-backend.onrender.com/api/AiNav/", {
             text: transcript,
           });
-
           let intent, target;
           try {
             const parsed = typeof res.data === "string" ? JSON.parse(res.data) : res.data;

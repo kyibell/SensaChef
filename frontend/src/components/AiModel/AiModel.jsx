@@ -11,7 +11,15 @@ function AiModel() {
     setResponse("");
 
     try {
-      const res = await fetch("http://localhost:8000/api/ask", {
+      // for development
+      // const res = await fetch("http://localhost:8000/api/ask", {
+      //   method: "POST",
+      //   headers: { "Content-Type": "application/json" },
+      //   body: JSON.stringify({ prompt: question }),
+      // });
+      // https://sensachef-backend.onrender.com/
+      // for production
+      const res = await fetch("https://sensachef-backend.onrender.com/api/ask", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ prompt: question }),
