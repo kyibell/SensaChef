@@ -59,6 +59,7 @@ jobs:
       - name: Run Python tests
         working-directory: backend
         run: |
+          ls -al
           pytest --cov=app app/backend_tests/test_backend.py
 
       # Deploy the backend via a webhook
