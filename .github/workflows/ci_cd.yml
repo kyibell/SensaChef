@@ -58,6 +58,10 @@ jobs:
 
       - name: Run Python tests
         working-directory: backend
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
         run: |
           pytest --cov=app app/backend_tests/test_backend.py
 
