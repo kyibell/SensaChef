@@ -20,7 +20,7 @@ router = APIRouter()
 async def get_all_comments(post_id: int):
     try:
         response = (
-            supabase.table("comments").select("*").eq("post_id", post_id).execute()
+            supabase.table("comments").select("*, users(username)").eq("post_id", post_id).execute()
         )
 
         if not response.data:
@@ -36,7 +36,7 @@ async def get_comment(comment_id: int):
         if comment_id:
             response = (
                 supabase.table("comments")
-                .select("*")
+                .select("*, user(username)")
                 .eq("id", comment_id)
                 .execute()
             )
