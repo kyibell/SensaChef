@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from app.database import supabase
-from .routers import users, recipes, ask
+from .routers import users, recipes, ask, AiNav
 from fastapi.middleware.cors import CORSMiddleware
 import os
 import uvicorn
@@ -9,6 +9,7 @@ app = FastAPI()
 app.include_router(users.router)
 app.include_router(recipes.router)
 app.include_router(ask.router)
+app.include_router(AiNav.router)
 
 origins = [
     "http://localhost:3000"
@@ -29,5 +30,5 @@ def read_root():
 
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8000))  # Default to 8000 if not set
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)

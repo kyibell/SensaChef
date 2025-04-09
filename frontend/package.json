@@ -10,11 +10,13 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "axios": "^1.8.4",
     "esbuild": "^0.25.2",
     "framer-motion": "^12.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.3.0",
+    "react-speech-recognition": "^4.0.0",
     "react-webcam": "^7.2.0"
   },
   "devDependencies": {

@@ -1,0 +1,13 @@
+.Ai-div {
+    display: flex;
+    align-items: center;   
+}
+.AiStart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 4, 8, 0.156);
+    height: 20x;
+    width: 20px;
+    border-radius: 50%;
+}
