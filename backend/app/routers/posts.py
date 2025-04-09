@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
 from datetime import datetime
 from app.database import supabase, admin_supabase
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List 
 from uuid import UUID, uuid4
 import pydantic
@@ -10,14 +10,11 @@ import pydantic
 router = APIRouter() # Define the Router for defining routes
 
 class Post(BaseModel): # Model for Posts
-    id: int
-    created_at: datetime
-    post_title: str
-    post_text: str
-    post_image: str
-    is_solved: bool
-    post_tags: List[str]
-    user_id: UUID = uuid4()
+    post_title: str = Field(..., min_length=5, description="title of the post")
+    post_text: str = Field(..., min_length=1, max_length=1000, description="The content of the post")
+    post_image: str = Field(..., description="The image URL of the Post")
+    post_tags: list[str] = Field(..., min_length=1, description="Tags assigned to the post")
+    user_id: UUID  = Field(...,description="The User ID Creating the post")
 
 
 # Get All Posts
@@ -70,29 +67,31 @@ async def get_users_post(user_id: UUID):
 
 
 # Create a Post
-@router.post("/{user_id}/create_post", tags=["posts"])
+@router.post("/{user_id}/create_post", tags=["posts"], status_code=201) # Weird Bug, getting Internal Server error 
 async def create_post(post: Post, user_id: UUID):
     try:
-        post_id = post.id
-        post_content = post.post_text
-        post_img = post.post_image
-        post_tags = post.post_tags
-        title = post.post_title
+        creation_date = datetime.now().isoformat() + "Z"
+
         db_user = supabase.table("users").select("*").eq("id", user_id)
         if not db_user:
             raise HTTPException(status_code=404, detail="User not found.")
-        post = supabase.table("posts").insert({ 
-            "id": post_id, "post_title": title,
-                                                "post_text": post_content,
-                                                  "post_image": post_img,
-                                                    "user_id": user_id }).execute()
+        post_data = {
+            "created_at": creation_date,
+            "post_title": post.post_title,
+            "post_image": post.post_image if post.post_image else None,
+            "post_tags": post.post_tags,
+            "user_id": str(post.user_id)
+        }
+        
+        response = supabase.table("posts").insert(post_data).execute()
 
-        if post:
-            return {"message": "Post created successfully."}
+        if response:
+            return response
         else:
-            return {"message": "Post creation failed."}
+            raise HTTPException(status_code=400,detail="Error inserting post: ", headers=response.error)
     except Exception as error:
-        raise HTTPException(status_code=500, detail="Internal Server Error.")
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+        print(error)
 
 
 # Update Post
