@@ -1,5 +1,5 @@
 # Use the official lightweight Python image.
-FROM python:3.13-alpine
+FROM python:3.13-slim
 
 # Set environment variables to prevent Python from writing .pyc files and buffering stdout/stderr.
 ENV PYTHONDONTWRITEBYTECODE=1
