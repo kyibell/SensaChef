@@ -25,7 +25,7 @@ async def get_all_posts():
     try:
         response  = (
             supabase.table("posts")
-            .select("*")
+            .select("*, users(username)")
             .execute()
         )
         if not response.data:

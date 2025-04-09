@@ -53,7 +53,7 @@ function PostList() {
                         </Link>
                     </h2>
                     <p>{shortenText(post.post_text)}</p>
-                    <p>By {post.user_id}</p>
+                    <p>By {post.users?.username || 'Unkown user'}</p>
                     <span style={{
                         color: post.is_solved ? "green" : "red",
                     }}>{post.is_solved ? 'Solved' : 'Unsolved'}</span>
