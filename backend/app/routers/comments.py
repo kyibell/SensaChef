@@ -65,8 +65,26 @@ async def get_user_comment(user_id: UUID):
 
 # Create A Comment
 @router.post('/{post_id}/create_comment',tags=["comments"])
-async def create_comment():
-    pass
+async def create_comment(comment: Comment, user_id: UUID):
+    try:
+        creation_date = datetime.now().isoformat() + "Z"
+        db_user = supabase.table("comments").select("*").eq("id", user_id).execute()
+        if not db_user:
+            raise HTTPException(status_code=404, detail="User Not Found")
+        
+        comment_data = {
+            "created_at": creation_date,
+            "comment": comment.comment,
+            "user_id": str(user_id),
+            "rating": comment.rating,
+        }
+        response = supabase.table("comments").insert(comment_data).execute()
+        if response:
+            return response
+        else: 
+            raise HTTPException(status_code=400, detail="Error creating comment.")
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 # Update A Comment
 @router.put('update_comment/{comment_id}', tags=["comments"])
