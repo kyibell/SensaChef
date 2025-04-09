@@ -15,7 +15,7 @@ const RecipeDetail = () => {
 			try {
 				// for development
 				// const recipeRes = await fetch(
-					// `http://localhost:8000/recipes/name/${recipeName}`
+				// 	`http://localhost:8000/recipes/name/${recipeName}`
 				// );
 				// for production
 				const recipeRes = await fetch(
