@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import useSpeechToText from '../../hooks/SpeechHooks/useSpeechToText';
 import useTextToSpeech from '../../hooks/SpeechHooks/useTextToSpeech';
 import Microphone from '../../assets/Microphone.svg';
+import './speechController.css';
 
 function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep, onTranscriptUpdate, showTextArea }) {
     const [textInput, setTextInput] = useState('');
@@ -109,7 +110,7 @@ function VoiceInput({ onRepeat, repeatText, onNextStep, onPreviousStep, onTransc
                     )}
                 </div>
             ) : (
-                <button onClick={startStopListening}>
+                <button className="Ai-mic-button" onClick={startStopListening}>
                     <img src={Microphone}/>
                 </button>
             )}
