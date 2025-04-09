@@ -41,7 +41,7 @@ async def get_post(post_id: int):
         if post_id: # Check if its a post_id
             post = (
                 supabase.table("posts")
-                .select("*")
+                .select("*, users(username)")
                 .eq("id", post_id)
                 .execute() # Run the query to find the post
             )
