@@ -27,6 +27,11 @@ function Nav() {
 					className={location.pathname === "/signup" ? "active" : ""}>
 					Sign-Up
 				</a>
+				<a
+					onClick={() => navigate("/Help")}
+					className={location.pathname === "/Help" ? "active" : ""}>
+					Help
+				</a>
 			</nav>
 		</header>
 	);

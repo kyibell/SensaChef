@@ -2,9 +2,9 @@ name: CI/CD
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   # Job 1: Filter changed files and set outputs for backend and frontend changes
@@ -39,9 +39,10 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10-slim"
+          python-version: "3.13"
 
-      - name: Install Python dependencies
+      - name: Install backend dependencies
+        working-directory: backend
         run: |
           python -m pip install --upgrade pip
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
@@ -56,19 +57,24 @@ jobs:
           fi
 
       - name: Run Python tests
+        working-directory: backend
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
-          if [ -f pytest.ini ] || ls tests; then
-            pytest
-          else
-            echo "No tests found, skipping tests."
-          fi
+          pytest --cov=app app/backend_tests/test_backend.py
 
       # Deploy the backend via a webhook
       - name: Deploy Backend
+        if: github.ref == 'refs/heads/main'
+        # Only run this step if the branch is main
         env:
           deploy_url: ${{ secrets.BACKEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
 
   # Job 3: Run frontend deployment if frontend files changed
   frontend_deploy:
@@ -79,10 +85,22 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23.11.0'
+
       # Add any frontend build/test steps if needed.
+      - name: Install Frontend Dependencies
+        working-directory: frontend
+        run: |
+          npm ci
+          npm run build --if-present
+
       # For now, we just deploy via the webhook.
       - name: Deploy Frontend
+        if: github.ref == 'refs/heads/main'
         env:
-          deploy_url: ${{ secrets.FRONTEND_DEPLOY_HOOK }}
+          deploy_url: ${{ secrets.FRONTEND_RENDER_DEPLOY_HOOK }}
         run: |
-          curl "$deploy_url"
+          curl -X POST "$deploy_url"
