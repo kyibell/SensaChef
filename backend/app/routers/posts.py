@@ -50,7 +50,26 @@ async def get_post(post_id: int):
             return post.data[0] # return the post
     except Exception as error: # Unless error, show generic error
         raise HTTPException(status_code=500, detail="Internal Server Error")
-    
+
+# Get a specific post's comments
+@router.get("/posts/{post_id}/comments", tags=["posts"])
+async def get_post_comments(post_id: int) :
+    try:
+        if post_id:
+            response = (supabase.table("comments")
+                        .select("*, users(username)")
+                        .eq("post_id", post_id)
+                        .order("created_at", desc=True) # Newest comments first
+                        .execute()
+            )
+
+            if not response.data:
+                return [] # No comments
+            
+            return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+
 # Get a specific User's Posts
 @router.get("/{user_id}/posts")
 async def get_users_post(user_id: UUID):
