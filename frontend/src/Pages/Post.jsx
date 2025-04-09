@@ -23,7 +23,7 @@ function Post({}) {
                 setPost(postData);
 
                 // Fetch comments of this post
-                const commentsResponse = await fetch(`http://localhost:8000/posts/${post_id}/comments`);
+                const commentsResponse = await fetch(`http://localhost:8000/${post_id}/comments`);
                 if(!commentsResponse.ok){
                     throw new Error('Failed to fetch comments');
                 }
@@ -81,10 +81,10 @@ function Post({}) {
                 <h2>Comments: {comments.length}</h2>
 
                 {comments.length > 0 ? (
-                    comments.map(comment => (
+                    comments.map((comment) => (
                         <div className="comment">
                             <div className="comment-info">
-                                <strong>{comment.user_id}</strong>
+                                <strong>By {comment.users?.username}</strong>
                                 <span>{new Date(comment.created_at).toLocaleString()}</span>
                             </div>
                             <p>{comment.comment}</p>
