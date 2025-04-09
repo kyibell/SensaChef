@@ -88,11 +88,25 @@ async def create_comment(comment: Comment, user_id: UUID, post_id: int):
         raise HTTPException(status_code=500, detail=error)
 
 # Update A Comment
-@router.put('update_comment/{comment_id}', tags=["comments"])
-async def update_comment():
-    pass
+@router.put('/update_comment/{comment_id}', tags=["comments"])
+async def update_comment(comment_id: int, comment: Comment):
+    try:
+        comment_data = {
+            "comment": comment.comment,
+            "rating": comment.rating,
+            "is_helpful": comment.is_helpful
+        }
+
+        response = supabase.table("comments").update(comment_data).eq("id", comment_id).execute()
+        return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 # Delete A Comment
 @router.delete('/delete_comment/{comment_id}', tags=["comments"])
-async def delete_comment():
-    pass
+async def delete_comment(comment_id: int):
+    try:
+        comment = supabase.table("comments").delete().eq("id", comment_id).execute()
+        return {"message": "Comment Deleted Successfully."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
