@@ -1,0 +1,36 @@
+.Ai-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    margin-top: 40px;
+}
+.ai-input-button {
+    margin-top: -10px;
+    display: flex;
+    align-items: center;
+}
+.Ai-input {
+    width: 300px;
+    text-indent: 5px;
+    border-radius: 5px;
+    border-style: none;
+    padding: 8px;
+}
+.Ai-ask-button {
+    padding: 0;
+    padding-right: 20px;
+    padding-left: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+}
+.Ai-container hr {
+    width: 250px;
+    margin-bottom: 20px;
+    border-style: solid;
+    color: white;
+}
+.Ai-response {
+    margin-top: 25px;
+    width: 100vh;
+}

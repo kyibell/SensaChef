@@ -36,3 +36,11 @@ async def get_recipe_steps(recipe_id: int):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.get("/recipes/name/{recipe_name}", tags=["recipes"])
+async def get_recipe_by_name(recipe_name: str):
+    response = supabase.table("recipes").select("*").eq("recipe-name", recipe_name).execute()
+    if not response.data:
+        raise HTTPException(status_code=404, detail="Recipe not found")
+    return response.data[0]

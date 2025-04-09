@@ -12,6 +12,7 @@ import CookingMode from "./Pages/CookingMode";
 import Login from "./Pages/Login";
 import RecipePage from "./components/RecipeDetail/RecipeDetail"; 
 import "./components/RecipePageUI/RecipePageUI.css";
+import Help from "./Pages/Help";
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -30,8 +31,9 @@ const AnimatedRoutes = () => {
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-
+          <Route path="/recipes/:recipeName" element={<RecipePage />} />
           <Route path="/cookingmode/:recipeId" element={<CookingMode />} />
+          <Route path="/help" element={<Help />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

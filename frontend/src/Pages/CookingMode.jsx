@@ -9,8 +9,6 @@ function CookingMode() {
 	console.log("Cookingmode.jsx rendered with recipeId: ", recipeId);
 	return (
 		<>
-			<h1>This is cooking mode page</h1>
-			<Timer />
 			{recipeId ? (
 				<>
 					<RecipeStep recipeId={recipeId} />

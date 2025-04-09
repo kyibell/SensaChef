@@ -1,0 +1,22 @@
+.recipe-container-detail {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+.recipe-container-detail img {
+    max-width: 500px;
+    border-radius: 12px;
+}
+.recipe-container-detail hr {
+    margin-bottom: 25px;
+    border-color: white;
+    width: 300px;
+    border-style: solid;
+}
+.food-description {
+    margin-bottom: 25px;
+}
+.recipe-container-detail ol {
+    margin-bottom: 25px;
+}

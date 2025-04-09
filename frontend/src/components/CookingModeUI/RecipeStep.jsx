@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom'
 import SpeechController from '../Speech/speechController';
 import VoiceInput from '../Speech/stt';
 import { useNavigate } from 'react-router-dom';
+import './RecipeStep.css';
+import Timer from '../Timer/Timer';
+
 function RecipeStep({ recipeId }) {
 
     const [currentStepIndex, setCurrentStepIndex] = useState(-1);
@@ -38,7 +41,10 @@ function RecipeStep({ recipeId }) {
 
             try{
                 // fetch recipe's name
-                const recipeResponse = await fetch(`http://localhost:8000/recipes/${recipeId}`);
+                // for development
+            //    const recipeResponse = await fetch(`http://localhost:8000/recipes/${recipeId}`);
+                // for production
+                const recipeResponse = await fetch(`https://sensachef-backend.onrender.com/recipes/${recipeId}`);
                 console.log("RECIPE RESPONSE: ", recipeResponse);
                 if (!recipeResponse.ok){
                     throw new Error('Recipe not found');
@@ -47,7 +53,10 @@ function RecipeStep({ recipeId }) {
                 setRecipeName(recipeData['recipe-name']);
 
                 // fetch step one
-                const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps`);
+                // for development
+               // const stepsResponse = await fetch(`http://localhost:8000/recipes/${recipeId}/steps`);
+                // for production
+                 const stepsResponse = await fetch(`https://sensachef-backend.onrender.com/recipes/${recipeId}/steps`);
                 console.log("STEPS RESPONSE: ", stepsResponse.status);
                 
                 if (!stepsResponse.ok){
@@ -177,7 +186,7 @@ function RecipeStep({ recipeId }) {
     const isLastStep = currentStepIndex === steps.length - 1;
 
     return (
-        <div>
+        <div className='command-container'>
             <h1>Cooking: {recipeName}</h1>
             <SpeechController 
                 stepText={
@@ -215,7 +224,7 @@ function RecipeStep({ recipeId }) {
                     {/* <SpeechController stepText={currentStep.instruction} /> */}
                 </>
             )}
-            <div>
+            <div className='commands-div'>
                 Commands available:
                 <ul>
                     <li>Repeat - repeats the instruction</li>
@@ -223,7 +232,11 @@ function RecipeStep({ recipeId }) {
                     <li>Previous step - moves to the previous step unless the user is on the welcome message</li>
                 </ul>
             </div>
+            <div>
+                <Timer />
+            </div>
         </div>
+        
     )
 }
 
