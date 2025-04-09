@@ -16,18 +16,52 @@ router = APIRouter()
 
 
 # Get All Comments
-@router.get("/comments", tags=["comments"])
-async def get_all_comments():
-    pass
+@router.get("/{post_id}/comments", tags=["comments"],status_code=200)
+async def get_all_comments(post_id: int):
+    try:
+        response = (
+            supabase.table("comments").select("*").eq("post_id", post_id).execute()
+        )
+
+        if not response.data:
+            raise HTTPException(status_code=404, detail="No comments found for this post.")
+        return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=error)
+    
 # Get a specific Comment
-@router.get("/comment/{comment_id}", tags=["comments"])
-async def get_comment():
-    pass
+@router.get("/comment/{comment_id}", tags=["comments"],status_code=200)
+async def get_comment(comment_id: int):
+    try:
+        if comment_id:
+            response = (
+                supabase.table("comments")
+                .select("*")
+                .eq("id", comment_id)
+                .execute()
+            )
+        if not response:
+            raise HTTPException(status_code=404, detail="Comment Not Found.")
+        return response.data[0]
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
 
 # Get a Specific User's Comment(s)
-@router.get("{user_id}/comment", tags=["comments"])
-async def get_user_comment():
-    pass
+@router.get("/{user_id}/comment", tags=["comments"])
+async def get_user_comment(user_id: UUID):
+    try:
+        response = (
+            supabase.table("comments")
+            .select("*")
+            .eq("user_id", user_id)
+            .execute()
+        )
+        if not response:
+            raise HTTPException(status_code=404, detail="User has no comments.")
+        return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail="Internal Server Error")
+    
 
 # Create A Comment
 @router.post('/{post_id}/create_comment',tags=["comments"])
