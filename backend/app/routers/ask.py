@@ -39,11 +39,10 @@ router = APIRouter()
 class Prompt(BaseModel):
     prompt: str
 
-
 cooking_ai = CookingAIWrapper(api_key=os.getenv("OPENAI_API_KEY"))
-
 
 @router.post("/api/ask")
 async def ask_ai(prompt: Prompt):
     result = cooking_ai.ask(prompt.prompt)
     return {"response": result}
+
