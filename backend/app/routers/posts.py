@@ -22,7 +22,7 @@ async def get_all_posts():
     try:
         response  = (
             supabase.table("posts")
-            .select("*")
+            .select("*, users(username)")
             .execute()
         )
         if not response.data:
@@ -38,7 +38,7 @@ async def get_post(post_id: int):
         if post_id: # Check if its a post_id
             post = (
                 supabase.table("posts")
-                .select("*")
+                .select("*, users(username)")
                 .eq("id", post_id)
                 .execute() # Run the query to find the post
             )
@@ -47,7 +47,8 @@ async def get_post(post_id: int):
             return post.data[0] # return the post
     except Exception as error: # Unless error, show generic error
         raise HTTPException(status_code=500, detail="Internal Server Error")
-    
+
+
 # Get a specific User's Posts
 @router.get("/{user_id}/posts")
 async def get_users_post(user_id: UUID):
