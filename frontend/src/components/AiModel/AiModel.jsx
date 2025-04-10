@@ -38,7 +38,6 @@ function AiModel() {
     setQuestion(transcript);
   };
   
-
   const AiModel = async () => {
     setLoading(true);
     setResponse("");
