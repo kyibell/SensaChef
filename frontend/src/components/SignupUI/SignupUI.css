@@ -21,12 +21,13 @@
 .signup-title-h1 {
     color: white;
     font-weight: normal;
+    margin-bottom: -6px; /* Reduced space between title and line */
 }
 .signup-hr {
     margin: 0px auto;
     width: 400px;
     border: 1px solid white;
-    margin-top: -15px;
+    margin-top: 5px; /* Reduced space between line and title */
 }
 .signup-FirstName {
     display: flex;
@@ -122,10 +123,58 @@
     background-color: rgb(225, 108, 30);
     color: white;
     border-style: none;
-    padding: 8px;
+    padding: 5px;
     border-radius: 10px;
     cursor: pointer;
 }
 .signup-enter-button button:hover {
     background-color: darkorange;
+}
+.signup-label-modern {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-left: 10px;
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+.signup-UserType {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 15px; /* Adjusted margin between Confirm Password and Sign Up As */
+}
+
+.signup-UserType div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 4px 0;
+}
+
+.signup-UserType label {
+    color: white;
+    font-size: 16px;
+}
+
+.signup-UserType {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px; /* Reduced space from Confirm Password */
+    padding: -15px;
+    background: rgba(255, 255, 255, 0.08); /* Light overlay */
+    border-radius: 16px;
+    width: 250px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Add styles for the "Sign up as" section */
+.signup-role h2,
+.signup-role label {
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
 }
