@@ -21,7 +21,7 @@ function SignupUI() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        const response = await fetch('https://sensachef-backend.onrender.com/api/signup', {
+        const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
