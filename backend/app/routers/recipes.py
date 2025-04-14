@@ -1,10 +1,20 @@
 from fastapi import APIRouter, HTTPException
 from app.database import supabase
+from pydantic import BaseModel # For Input Validation
+from uuid import UUID
 
 router = APIRouter() 
 
 # RECIPE ROUTES 
 # --------------------------------
+class Recipe(BaseModel):
+    recipe_name: str
+    recipe_image: str
+    recipe_tags: list[str]
+    recipe_description: str
+    user_id = UUID
+
+
 
 # Get all Recipes
 @router.get("/recipes", tags=["recipes"])
@@ -47,16 +57,16 @@ async def get_recipe_by_name(recipe_name: str):
 
 
 # Create A Recipe
-@router.post("/recipes/create_recipe", tags=["recipes"])
+@router.post("/create_recipe", tags=["recipes"])
 async def create_recipe():
     pass
 
 # Update A Recipe
-@router.put("/recipes/update_recipe", tags=["recipes"])
+@router.put("/update_recipe/{recipe_id}", tags=["recipes"])
 async def update_recipe():
     pass
 
 # Delete a Recipe
-@router.delete("/recipes/delete_recipe", tags=["recipes"])
+@router.delete("/delete_recipe/{recipe_id}", tags=["recipes"])
 async def delete_recipe():
     pass
