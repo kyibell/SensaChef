@@ -44,3 +44,19 @@ async def get_recipe_by_name(recipe_name: str):
     if not response.data:
         raise HTTPException(status_code=404, detail="Recipe not found")
     return response.data[0]
+
+
+# Create A Recipe
+@router.post("/recipes/create_recipe", tags=["recipes"])
+async def create_recipe():
+    pass
+
+# Update A Recipe
+@router.put("/recipes/update_recipe", tags=["recipes"])
+async def update_recipe():
+    pass
+
+# Delete a Recipe
+@router.delete("/recipes/delete_recipe", tags=["recipes"])
+async def delete_recipe():
+    pass
