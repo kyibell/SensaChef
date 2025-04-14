@@ -7,8 +7,8 @@
 .signup-container {
     border-style: none;
     border-radius: 10px;
-    width: 450px;
-    height: 500px;
+    width: 500px;
+    height: 550px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -74,6 +74,23 @@
     font-size: 18px;
 }
 .signup-Email input {
+    width: 250px;
+    margin: 0px auto;
+    padding: 5px;
+    border-radius: 5px;
+    border-style: none;
+}
+.signup-UserName {
+    display: flex;
+    flex-direction: column;
+}
+.signup-UserName h2 {
+    margin-left: 100px;
+    color: white;
+    font-weight: normal;
+    font-size: 18px;
+}
+.signup-UserName input {
     width: 250px;
     margin: 0px auto;
     padding: 5px;

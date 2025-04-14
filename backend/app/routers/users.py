@@ -8,10 +8,13 @@ from app.auth.auth_handler import JWTBearer
 
 router = APIRouter()
 class userModel(BaseModel):
-    name: str
+    firstName: str
+    lastName: str
     username: str
     email: str
     password: str
+    confirmPassword: str
+    userType: str
     
 class SignInModel(BaseModel):
     email: str
@@ -26,11 +29,17 @@ async def read_all_users():
 # Create A User
 @router.post("/create_user", tags=["users"])
 async def create_user(user: userModel):
+
+    if user.password != user.confirmPassword:
+        raise HTTPException(status_code=400, detail="Passwords do not match")
+
+    full_name = user.firstName + " " + user.lastName
+
     response = supabase.auth.sign_up(
     {
         "email": user.email,
         "password": user.password,
-        "options": {"data": {"full_name": user.name, "username": user.username}},
+        "options": {"data": {"full_name": full_name, "username": user.username, "userType": user.userType}},
     }
 )
     return response
