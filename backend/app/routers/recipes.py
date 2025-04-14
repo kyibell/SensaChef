@@ -12,7 +12,7 @@ class Recipe(BaseModel):
     recipe_image: str
     recipe_tags: list[str]
     recipe_description: str
-    user_id = UUID
+    user_id: UUID
 
 
 
