@@ -1,0 +1,11 @@
+/* src/pages/ForumPage.css */
+.forum-page {
+    padding: 20px;
+  }
+  
+  .forum-title {
+    font-size: 2rem;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  

@@ -6,6 +6,8 @@ import Navbar from "./components/Navigation/Navbar";
 
 
 // Import pages
+import CreatePostForm from "./components/CreatePostForm/CreatePostForm";
+import ForumPage from "./Pages/ForumPage/ForumPage";
 import Home from "./Pages/Home"; 
 import SignUp from "./Pages/Sign-up";
 import CookingMode from "./Pages/CookingMode";
@@ -39,6 +41,8 @@ const AnimatedRoutes = () => {
           <Route path="/posts" element={<PostList />} />
           <Route path="/posts/:post_id" element={<Post />} />
           <Route path="posts/:post_id/comments" element={<Post />}/>
+          <Route path="/forum" element={<ForumPage />} />
+          
         </Routes>
       </motion.div>
     </AnimatePresence>
