@@ -1,0 +1,17 @@
+.recipe-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    padding: 20px;
+}
+
+.recipe-list >dix {
+    transition: transform 0.2s ease-in-out;
+}
+
+
+.recipe-list > div:hover {
+    transform: scale(1.05);
+}
+

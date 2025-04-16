@@ -15,6 +15,7 @@ import "./components/RecipePageUI/RecipePageUI.css";
 import Help from "./Pages/Help";
 import PostList from "./components/Forum/PostList";
 import Post from "./Pages/Post";
+import CreatePost from "./components/Forum/CreatePost";
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -39,6 +40,7 @@ const AnimatedRoutes = () => {
           <Route path="/posts" element={<PostList />} />
           <Route path="/posts/:post_id" element={<Post />} />
           <Route path="posts/:post_id/comments" element={<Post />}/>
+          <Route path="/create-post" element={<CreatePost/>} />
         </Routes>
       </motion.div>
     </AnimatePresence>
