@@ -80,7 +80,8 @@ async def create_post(post: Post, user_id: UUID):
             "post_title": post.post_title,
             "post_image": post.post_image if post.post_image else None,
             "post_tags": post.post_tags,
-            "user_id": str(post.user_id) # Convert to Str bc Supabase Can't read in the UUID Obj.
+            "user_id": str(post.user_id), # Convert to Str bc Supabase Can't read in the UUID Obj.
+            "post_text": post.post_text 
         }
 
         response = supabase.table("posts").insert(post_data).execute() # Run Insertion
