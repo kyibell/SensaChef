@@ -71,26 +71,26 @@ async def create_recipe(user_id: UUID,
             raise HTTPException(status_code=404, detail="User Not Found.")
         # Get a File name for Storage
         file_extension = image.filename.split(".")[-1] # Fetch the file extension from the image upload
-        file_name = f"recipes/{user_id}/{title}.{file_extension}"
+        file_name = f"recipes/{user_id}/{title}.{file_extension}" # Unique name for file
 
-        img_file = await image.read()
+        img_file = await image.read() # Read the Image
 
-        image_response = (
+        image_response = ( # Upload the image into supabase storage
             admin_supabase.storage
             .from_('recipe-images')
             .upload(
-                file=img_file,
-                path=file_name,
+                file=img_file, 
+                path=file_name, # Path for Files
                 file_options={"content-type": 'image/jpeg'}
             )
         )
 
         if not image_response:
-            raise HTTPException(status_code=500, detail="Error Uploading Image")
+            raise HTTPException(status_code=500, detail="Error Uploading Image") # Error Handle for image response error
         
-        recipe_image = admin_supabase.storage.from_('recipe-images').get_public_url(file_name)
+        recipe_image = admin_supabase.storage.from_('recipe-images').get_public_url(file_name) # Fetch the public url for the image
 
-        recipe_data = {
+        recipe_data = { # Pass the recipe data to supabase in a dictonary
             "recipe-name": title,
             "image_url": recipe_image,
             "image_tags": recipe_tags,
@@ -98,12 +98,12 @@ async def create_recipe(user_id: UUID,
             "user_id": str(user_id)
         }
 
-        response = admin_supabase.table("recipes").insert(recipe_data).execute()
+        response = admin_supabase.table("recipes").insert(recipe_data).execute() # Run Insertion
 
         if response:
-            return response
+            return response # Return response if successful
         else:
-            raise HTTPException(status_code=400, detail="Error creating recipe")
+            raise HTTPException(status_code=400, detail="Error creating recipe") # Else return error
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error))
 
