@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 function CreatePost() {
 
@@ -9,9 +9,40 @@ function CreatePost() {
     const [tags, setTags] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-
+    const navigate = useNavigate();
     const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setError(null);
 
+        try {
+            const response = await fetch('http://localhost:8000/create_post', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+
+                },
+                body: JSON.stringify({
+                    post_title: title,
+                    post_text: content,
+                    post_image: imageUrl,
+                    post_tags: tags.split(',').map(tag => tag.trim())
+                })
+            });
+
+            if(!response.ok) {
+                throw new Error(await response.text());
+            }
+
+            const data = await response.json();
+            console.log("post created: ", data);
+            navigate('/posts');
+        } catch (err) {
+            console.log("Error creating post: ", err);
+            setError(err.message);
+        } finally {
+            setLoading(false);
+        }
     }
     return (
         <div style={{ padding: "2rem" }}>
