@@ -10,12 +10,16 @@ function CreatePost() {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
+            const userId = localStorage.getItem("userId");
+            if (!userId) throw new Error("User not authenticated");
+            
             const response = await fetch('http://localhost:8000/create_post', {
                 method: 'POST',
                 headers: {
