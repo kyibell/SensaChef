@@ -21,9 +21,7 @@ async def get_all_comments(post_id: int):
         response = (
             supabase.table("comments").select("*, users(username)").eq("post_id", post_id).execute()
         )
-
-        if not response.data:
-            raise HTTPException(status_code=404, detail="No comments found for this post.")
+        
         return response.data
     except Exception as error:
         raise HTTPException(status_code=500, detail=error)
