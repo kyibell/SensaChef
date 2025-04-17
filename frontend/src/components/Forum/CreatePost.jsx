@@ -17,10 +17,12 @@ function CreatePost() {
         setError(null);
 
         try {
-            const userId = localStorage.getItem("userId");
+            // const userId = localStorage.getItem("userId");
+            const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819';
             if (!userId) throw new Error("User not authenticated");
-            
-            const response = await fetch('http://localhost:8000/create_post', {
+
+
+            const response = await fetch(`http://localhost:8000/${userId}/create_post`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
