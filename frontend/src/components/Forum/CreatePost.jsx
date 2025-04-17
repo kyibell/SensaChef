@@ -1,12 +1,49 @@
+import './Forum.css';
+
 export default function CreatePost() {
-    return (
-        <div style={{ padding: "2rem" }}>
-            <h2>Create a New Post</h2>
-            <form>
-                <input type="text" placeholder="Title" style={{ display: 'block', marginBottom: '1rem', width: '100%' }} />
-                <textarea placeholder="Post content..." style={{ display: 'block', width: '100%', height: '150px', marginBottom: '1rem' }} />
-                <button type="submit">Submit</button>
-            </form>
+  return (
+    <div className="create-post-container">
+      <h2>Create a New Post</h2>
+      <form>
+        <div className="form-row">
+          <label htmlFor="title">Title:</label>
+          <input id="title" type="text" placeholder="Enter Post Title" />
         </div>
-    );
+
+        <div className="form-row">
+          <label htmlFor="content">Content:</label>
+          <textarea id="content" placeholder="Post content..." />
+        </div>
+
+        <div className="form-row">
+          <label htmlFor="tags">Tags:</label>
+          <input id="tags" type="text" placeholder="e.g. Tips, Cooking, Help" />
+        </div>
+
+        <div className="tag-options">
+          {["Tips", "Object Detection", "Ingredient Identification"].map((tag, index) => (
+            <span
+                key={index}
+                className="tag-bubble"
+                onClick={() => {
+                    const input = document.getElementById("tags");
+                    input.value = input.value ? input.value + ", " + tag : tag;
+          }}
+        >
+              {tag}
+           </span>
+         ))}
+        </div>
+            
+
+        <div className="form-row">
+            <label htmlFor="image"> Image:</label>
+            <input id="image" type="file" accept="image/*" />
+        </div>
+
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
 }
+
