@@ -48,7 +48,7 @@ async def get_recipe_steps(recipe_id: int):
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
-
+# Get a recipe by Name
 @router.get("/recipes/name/{recipe_name}", tags=["recipes"])
 async def get_recipe_by_name(recipe_name: str):
     response = supabase.table("recipes").select("*").eq("recipe-name", recipe_name).execute()
@@ -69,6 +69,7 @@ async def create_recipe(user_id: UUID,
         db_user = supabase.table("users").select("*").eq("id", user_id)
         if not db_user:
             raise HTTPException(status_code=404, detail="User Not Found.")
+        
         # Get a File name for Storage
         file_extension = image.filename.split(".")[-1] # Fetch the file extension from the image upload
         file_name = f"recipes/{user_id}/{title}.{file_extension}" # Unique name for file
