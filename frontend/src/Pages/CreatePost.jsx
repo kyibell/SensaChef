@@ -1,65 +1,100 @@
-import React, { useState } from 'react';
-import CreatePostForm from '../components/CreateFormPost/CreatePostForm';
-import PostCard from '../components/PostCard';
-import './CreatePost.css';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AiModel from "../components/AiModel/AiModel";
+import PostList from "../components/Forum/PostList";
 
-const dummyPosts = [
-  {
-    id: 1,
-    question: 'Tips for chopping vegetables?',
-    tag: 'Tips',
-    liked: false,
-    likes: 15
-  },
-  {
-    id: 2,
-    question: 'Is this apple fresh?',
-    tag: 'Object detection',
-    liked: true,
-    likes: 57
-  },
-  {
-    id: 3,
-    question: 'How can I turn on the stove?',
-    tag: 'Steps help',
-    liked: false,
-    likes: 9
-  }
-];
-
-export default function CreatePost() {
-  const [posts, setPosts] = useState(dummyPosts);
+export default function Help() {
+  const [filter, setFilter] = useState("All");
+  const navigate = useNavigate();
 
   return (
-    <div className="ask-page">
-      <header className="ask-header">
-        <h1>Assistance Forums</h1>
-        <div className="ask-search">
-          <input type="text" placeholder="What do you need help with?" />
-          <button className="ask-ai">Ask AI</button>
-        </div>
-      </header>
-
-      <div className="ask-body">
-        <div className="post-feed">
-          <CreatePostForm />
-          <div className="filter-buttons">
-            <button className="active">All</button>
-            <button>Open</button>
-            <button>Solved</button>
+    <div style={{ backgroundColor: "#f59e0b", minHeight: "100vh", padding: "2rem" }}>
+      {/* Outer Container - Wraps tags and posts */}
+      <div style={{
+        display: "flex",
+        justifyContent: "space-between",
+        gap: "2rem",
+        maxWidth: "1200px",
+        margin: "0 auto"
+      }}>
+        
+        {/* Main Content Area */}
+        <div style={{ flex: 3 }}>
+          {/* AI Search Bar */}
+          <div style={{ marginBottom: "1.5rem" }}>
+            <AiModel />
           </div>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
+
+          {/* Filter + Create Post */}
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "1rem"
+          }}>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button onClick={() => setFilter("All")} style={getTabStyle(filter === "All")}>All</button>
+              <button onClick={() => setFilter("Open")} style={getTabStyle(filter === "Open")}>Open</button>
+              <button onClick={() => setFilter("Solved")} style={getTabStyle(filter === "Solved")}>Solved</button>
+            </div>
+            <button
+              onClick={() => navigate("/forum")}
+              style={{
+                background: "linear-gradient(to right, #6366f1, #8b5cf6)",
+                color: "#fff",
+                padding: "0.5rem 1rem",
+                border: "none",
+                borderRadius: "999px",
+                fontWeight: "bold",
+                cursor: "pointer"
+              }}
+            >
+              + Create Post
+            </button>
+          </div>
+
+          {/* Posts List */}
+          <PostList filter={filter} />
         </div>
 
-        <div className="tag-sidebar">
-          <h3>Tags</h3>
-          <div className="tag tips">Tips</div>
-          <div className="tag steps-help">Steps help</div>
-          <div className="tag object-detection">Object detection</div>
+        {/* Tags Sidebar */}
+        <div style={{
+          flex: 1,
+          backgroundColor: "#fff",
+          borderRadius: "12px",
+          padding: "1rem",
+          height: "fit-content"
+        }}>
+          <h3 style={{ fontWeight: "bold", marginBottom: "1rem" }}>Tags</h3>
+          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <span style={tagStyle("#22c55e")}>Tips</span>
+            <span style={tagStyle("#b91c1c")}>Steps help</span>
+            <span style={tagStyle("#7c3aed")}>Object detection</span>
+          </div>
         </div>
       </div>
     </div>
   );
+}
+
+function getTabStyle(active) {
+  return {
+    backgroundColor: active ? "#fff" : "transparent",
+    padding: "0.5rem 1rem",
+    borderRadius: "999px",
+    border: active ? "1px solid #000" : "none",
+    fontWeight: "bold",
+    cursor: "pointer",
+    color: active ? "#000" : "#333"
+  };
+}
+
+function tagStyle(bg) {
+  return {
+    backgroundColor: bg,
+    color: "#fff",
+    borderRadius: "999px",
+    padding: "0.4rem 0.8rem",
+    fontSize: "0.8rem"
+  };
 }
