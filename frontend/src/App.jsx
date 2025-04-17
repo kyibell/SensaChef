@@ -1,22 +1,20 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
-// Import components
+// Components
 import Navbar from "./components/Navigation/Navbar"; 
 
-
-// Import pages
-import CreatePostForm from "./components/CreatePostForm/CreatePostForm";
-import ForumPage from "./Pages/ForumPage/ForumPage";
+// Pages
 import Home from "./Pages/Home"; 
 import SignUp from "./Pages/Sign-up";
 import CookingMode from "./Pages/CookingMode";
 import Login from "./Pages/Login";
 import RecipePage from "./components/RecipeDetail/RecipeDetail"; 
-import "./components/RecipePageUI/RecipePageUI.css";
 import Help from "./Pages/Help";
 import PostList from "./components/Forum/PostList";
 import Post from "./Pages/Post";
+
+import "./components/RecipePageUI/RecipePageUI.css";
 
 const pageVariants = {
   initial: { opacity: 0, y: 20 },
@@ -29,7 +27,13 @@ const AnimatedRoutes = () => {
 
   return (
     <AnimatePresence mode="wait">
-      <motion.div key={location.pathname} variants={pageVariants} initial="initial" animate="animate" exit="exit">
+      <motion.div
+        key={location.pathname}
+        variants={pageVariants}
+        initial="initial"
+        animate="animate"
+        exit="exit"
+      >
         <Routes location={location}>
           <Route path="/" element={<Navigate to="/home" replace />} />
           <Route path="/home" element={<Home />} />
@@ -40,9 +44,7 @@ const AnimatedRoutes = () => {
           <Route path="/help" element={<Help />} />
           <Route path="/posts" element={<PostList />} />
           <Route path="/posts/:post_id" element={<Post />} />
-          <Route path="posts/:post_id/comments" element={<Post />}/>
-          <Route path="/forum" element={<ForumPage />} />
-          
+          <Route path="/posts/:post_id/comments" element={<Post />} />
         </Routes>
       </motion.div>
     </AnimatePresence>

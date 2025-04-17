@@ -1,33 +1,28 @@
-// src/components/PostList/PostList.jsx
-import React, { useState, useEffect } from "react";
-import PostCard from "../PostCard/PostCard"; // Import the PostCard component
+import React, { useState, useEffect } from 'react';
+import PostCard from './PostCard';
 
-function PostList() {
+function PostList({ filter = "All" }) {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Truncate post descriptions that are too long
+  // Truncate long text
   const shortenText = (text, maxLength = 100) => {
-    if (!text) return "";
-    if (text.length <= maxLength) return text;
-    return `${text.substring(0, maxLength)}...`;
+    if (!text) return '';
+    return text.length <= maxLength ? text : `${text.substring(0, maxLength)}...`;
   };
 
   useEffect(() => {
     const fetchPosts = async () => {
       try {
         const response = await fetch(`https://sensachef-backend.onrender.com/posts`);
-        if (!response.ok) {
-          throw new Error("Network response was not ok");
-        }
-
+        if (!response.ok) throw new Error('Network response was not ok');
         const data = await response.json();
         setPosts(data);
         setError(null);
       } catch (err) {
         setError(err.message);
-        console.log("Fetch error details: ", err);
+        console.error("Fetch error details: ", err);
       } finally {
         setLoading(false);
       }
@@ -41,16 +36,27 @@ function PostList() {
 
   return (
     <div>
-      <h1>Posts</h1>
-      {posts.length === 0 ? (
-        <p>No posts available. Be the first to post!</p>
-      ) : (
-        <div>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
-          ))}
-        </div>
-      )}
+      {posts
+        .filter((post) => {
+          if (filter === "All") return true;
+          if (filter === "Open") return !post.is_solved;
+          if (filter === "Solved") return post.is_solved;
+          return true;
+        })
+        .map((post) => (
+          <PostCard
+            key={post.id}
+            post={{
+              id: post.id,
+              title: post.post_title,
+              description: shortenText(post.post_text),
+              author: post.users?.username || "Unknown user",
+              tags: post.post_tags || [],
+              status: post.is_solved ? "Solved" : "Unsolved",
+              likes: post.likes || 0,
+            }}
+          />
+        ))}
     </div>
   );
 }
