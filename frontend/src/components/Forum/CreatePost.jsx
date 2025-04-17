@@ -1,4 +1,18 @@
-export default function CreatePost() {
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
+function CreatePost() {
+
+    const [title, setTitle] = useState('');
+    const [content, setContent] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
+    const [tags, setTags] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+
+    const handleSubmit = async (e) => {
+
+    }
     return (
         <div style={{ padding: "2rem" }}>
             <h2>Create a New Post</h2>
@@ -10,3 +24,5 @@ export default function CreatePost() {
         </div>
     );
 }
+
+export default CreatePost;
