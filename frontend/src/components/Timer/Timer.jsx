@@ -1,15 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Timer.css';
 
-//test change 1
-// test change 2
-// test change 3
 function Timer() {
     const [timeLeft, setTimeLeft] = useState(0);
     const [running, setRunning] = useState(false);
     const [statusText, setStatusText] = useState("Enter time manually or use voice commands.");
 
     const timerRef = useRef(null);
+    const timeLeftRef = useRef(timeLeft); // <-- NEW
     const alarmRef = useRef(null);
     const recognitionRef = useRef(null);
 
@@ -21,14 +19,22 @@ function Timer() {
     };
 
     const startTimer = () => {
-        if (timeLeft > 0 && !running) {
+        if (!running) {
+            if (timeLeftRef.current <= 0) {
+                setStatusText("Please set a time before starting.");
+                speak("Please set a time before starting the timer.");
+                return;
+            }
+
             setRunning(true);
             setStatusText("Timer started.");
             speak("Timer started.");
 
             timerRef.current = setInterval(() => {
                 setTimeLeft(prev => {
-                    if (prev <= 1) {
+                    const newTime = prev - 1;
+                    timeLeftRef.current = newTime; // <-- keep ref updated
+                    if (newTime <= 0) {
                         clearInterval(timerRef.current);
                         setRunning(false);
                         setStatusText("Time's up!");
@@ -36,7 +42,7 @@ function Timer() {
                         alarmRef.current?.play();
                         return 0;
                     }
-                    return prev - 1;
+                    return newTime;
                 });
             }, 1000);
         }
@@ -50,7 +56,7 @@ function Timer() {
     };
 
     const resumeTimer = () => {
-        if (!running && timeLeft > 0) {
+        if (!running && timeLeftRef.current > 0) {
             startTimer();
         }
     };
@@ -58,6 +64,7 @@ function Timer() {
     const stopTimer = () => {
         clearInterval(timerRef.current);
         setTimeLeft(0);
+        timeLeftRef.current = 0;
         setRunning(false);
         setStatusText("Timer stopped.");
         speak("Timer stopped.");
@@ -66,6 +73,7 @@ function Timer() {
     const resetTimer = () => {
         clearInterval(timerRef.current);
         setTimeLeft(0);
+        timeLeftRef.current = 0;
         setRunning(false);
         setStatusText("Timer reset.");
         speak("Timer reset.");
@@ -90,8 +98,10 @@ function Timer() {
         const seconds = parseTime(input);
         if (seconds > 0) {
             setTimeLeft(seconds);
+            timeLeftRef.current = seconds; // <-- sync ref
             setStatusText(`Timer set for ${input}`);
             speak(`Timer set for ${input}`);
+            setTimeout(() => startTimer(), 100); // delay to ensure sync
         } else {
             setStatusText("Invalid input. Use format like '2 minutes 30 seconds'.");
             speak("Invalid input. Please use a valid time format. For example, '2 minutes 30 seconds'.");
@@ -100,36 +110,92 @@ function Timer() {
 
     useEffect(() => {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        if (!SpeechRecognition) {
+            setStatusText("Your browser does not support voice recognition.");
+            return;
+        }
+
         const recognition = new SpeechRecognition();
         recognition.lang = 'en-US';
-        recognitionRef.current = recognition;
+        recognition.continuous = false;
+        recognition.interimResults = false;
+
+        recognition.onstart = () => {
+            console.log("Voice recognition started.");
+        };
+
+        recognition.onend = () => {
+            console.log("Voice recognition ended.");
+        };
+
+        recognition.onerror = (event) => {
+            console.error("Speech Recognition Error:", event.error);
+            setStatusText("Voice recognition error. Try again.");
+        };
 
         recognition.onresult = (event) => {
             const command = event.results[0][0].transcript.trim().toLowerCase();
-            if (command.includes("set timer for")) {
-                const timeInSeconds = parseTime(command);
+            console.log("Heard command:", command);
+            setStatusText(`Heard: "${command}"`);
+
+            if (
+                command.includes("set timer for") ||
+                command.includes("set a timer for") ||
+                command.includes("set the timer for")
+            ) {
+                const cleanedCommand = command
+                    .replace("set timer for", "")
+                    .replace("set a timer for", "")
+                    .replace("set the timer for", "")
+                    .trim();
+
+                const timeInSeconds = parseTime(cleanedCommand);
                 if (timeInSeconds > 0) {
                     setTimeLeft(timeInSeconds);
-                    setStatusText(`Timer set for ${command.replace("set timer for", "").trim()}`);
-                    speak(`Timer set for ${command.replace("set timer for", "").trim()}`);
-                    startTimer();
+                    timeLeftRef.current = timeInSeconds; // <-- sync ref
+                    setStatusText(`Timer set for ${cleanedCommand}`);
+                    speak(`Timer set for ${cleanedCommand}`);
+                    setTimeout(() => startTimer(), 100);
+                    return;
                 }
-            } else if (command.includes("start timer")) startTimer();
-            else if (command.includes("pause timer")) pauseTimer();
-            else if (command.includes("resume timer")) resumeTimer();
-            else if (command.includes("stop timer")) stopTimer();
-            else if (command.includes("reset timer")) resetTimer();
+            }
+
+            if (command.includes("start") || command.includes("begin") || command.includes("go")) {
+                startTimer();
+            } else if (command.includes("pause")) {
+                pauseTimer();
+            } else if (command.includes("resume") || command.includes("continue")) {
+                resumeTimer();
+            } else if (command.includes("stop")) {
+                stopTimer();
+            } else if (command.includes("reset")) {
+                resetTimer();
+            } else {
+                speak("Command not recognized.");
+                setStatusText("Sorry, I didn't understand the command.");
+            }
         };
+
+        recognitionRef.current = recognition;
     }, []);
 
-    const startVoiceRecognition = () => recognitionRef.current?.start();
+    const startVoiceRecognition = () => {
+        try {
+            recognitionRef.current?.start();
+        } catch (err) {
+            console.error("Error starting voice recognition:", err.message);
+        }
+    };
 
     const stopAlarmSound = () => {
         alarmRef.current.pause();
         alarmRef.current.currentTime = 0;
     };
 
-    const speak = (text) => speechSynthesis.speak(new SpeechSynthesisUtterance(text));
+    const speak = (text) => {
+        const utterance = new SpeechSynthesisUtterance(text);
+        speechSynthesis.speak(utterance);
+    };
 
     return (
         <div className="timer-wrapper">
@@ -137,7 +203,7 @@ function Timer() {
             <p className="timer-status">{statusText}</p>
 
             <div className="timer-input-block">
-                <input className="timer-input" type="text" id="manualInput" placeholder="Enter Time" />
+                <input className="timer-input" type="text" id="manualInput" placeholder="Enter Time (e.g. 2 minutes)" />
                 <button className="timer-set-button" onClick={handleSetTime}>Set Time</button>
             </div>
 
