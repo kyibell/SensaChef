@@ -1,8 +1,4 @@
-import React, { useState } from "react";
-import { Navigate, useNavigate } from "react-router-dom";
-
 function CreatePost() {
-
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [imageUrl, setImageUrl] = useState('');
@@ -51,15 +47,49 @@ function CreatePost() {
         }
     }
     return (
-        <div style={{ padding: "2rem" }}>
+        <div className="create-post-container">
             <h2>Create a New Post</h2>
             <form onSubmit={handleSubmit}>
-                <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="Title" style={{ display: 'block', marginBottom: '1rem', width: '100%' }} />
-                <textarea value={content} onChange={(e) => setContent(e.target.value)} required placeholder="Post content..." style={{ display: 'block', width: '100%', height: '150px', marginBottom: '1rem' }} />
-                <button type="submit" disabled={loading}>{loading ? 'Creating...' : 'Create Post'}</button>
+                <div className="form-row">
+                    <label htmlFor="title">Title:</label>
+                    <input value={title} onChange={(e) => setTitle(e.target.value)} required id="title" type="text" placeholder="Enter Post Title" />
+                </div>
+
+                <div className="form-row">
+                    <label htmlFor="content">Content:</label>
+                    <textarea value={content} onChange={(e) => setContent(e.target.value)} required id="content" placeholder="Post content..." />
+                </div>
+
+                <div className="form-row">
+                    <label htmlFor="tags">Tags:</label>
+                    <input id="tags" type="text" placeholder="e.g. Tips, Cooking, Help" />
+                </div>
+
+                <div className="tag-options">
+                    {["Tips", "Object Detection", "Ingredient Identification"].map((tag, index) => (
+                        <span
+                            key={index}
+                            className="tag-bubble"
+                            onClick={() => {
+                                const input = document.getElementById("tags");
+                                input.value = input.value ? input.value + ", " + tag : tag;
+                    }}
+                >
+                    {tag}
+                </span>
+                ))}
+                </div>
+                    
+
+                <div className="form-row">
+                    <label htmlFor="image"> Image:</label>
+                    <input id="image" type="file" accept="image/*" />
+                </div>
+
+                <button type="submit">Submit</button>
             </form>
         </div>
-    );
+  );
 }
 
 export default CreatePost;

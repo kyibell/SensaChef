@@ -2,7 +2,8 @@ from fastapi import APIRouter, HTTPException, UploadFile, Form
 from app.database import supabase, admin_supabase
 from pydantic import BaseModel # For Input Validation
 from uuid import UUID
-import os
+import json
+from typing import List
 
 router = APIRouter() 
 
@@ -38,7 +39,7 @@ async def get_recipe(recipe_id: int):
 @router.get("/recipes/{recipe_id}/steps", tags=["recipes"])
 async def get_recipe_steps(recipe_id: int):
     try:
-        recipe_exists = supabase.table("steps").select("id").eq("id", recipe_id).execute()
+        recipe_exists = supabase.table("steps").select("id").eq("recipe_id", recipe_id).execute()
         if not recipe_exists.data:
             raise HTTPException(status_code=404, detail="Recipe not found")
         
@@ -64,6 +65,7 @@ async def create_recipe(user_id: UUID,
                         title: str = Form(),
                         description: str = Form(),
                         recipe_tags: list[str] = Form(),
+                        steps: str = Form(...)
                         ):
     try:
         db_user = supabase.table("users").select("*").eq("id", user_id)
@@ -99,10 +101,29 @@ async def create_recipe(user_id: UUID,
             "user_id": str(user_id)
         }
 
-        response = admin_supabase.table("recipes").insert(recipe_data).execute() # Run Insertion
+        recipe_response = admin_supabase.table("recipes").insert(recipe_data).execute() # Run Insertion
 
-        if response:
-            return response # Return response if successful
+        if recipe_response:
+            recipe_id =  recipe_response.data[0]["id"] # Fetch the recipe id
+
+            steps_list = steps.split("|") # Slip the Steps with a Delimiter
+            steps_data = []
+            for i, step in enumerate(steps_list): # Loop through the list
+                steps_data.append({
+                    "recipe_id": recipe_id,
+                    "step_number": i + 1,
+                    "instruction": step.strip()
+                })
+            
+
+            if steps_data:
+                steps_response = supabase.table("steps").insert(steps_data).execute()
+            if not steps_response:
+                supabase.table('recipes').delete().eq("id", recipe_id) # Make sure to delete the recipe if there's an error
+                raise HTTPException(status_code=400, detail="error creating steps")
+            else: 
+                return recipe_response, steps_response
+
         else:
             raise HTTPException(status_code=400, detail="Error creating recipe") # Else return error
     except Exception as error:
@@ -110,10 +131,24 @@ async def create_recipe(user_id: UUID,
 
 # Update A Recipe
 @router.put("/update_recipe/{recipe_id}", tags=["recipes"])
-async def update_recipe():
-    pass
+async def update_recipe(recipe_id: int, recipe: Recipe):
+    try:
+      recipe_data = {
+          "recipe_name": recipe.recipe_name,
+          "image_url": recipe.recipe_image,
+          "image_tags": recipe.recipe_tags,
+          "description": recipe.recipe_description
+      }
+      response = supabase.table("recipes").update(recipe_data).eq("id", recipe_id).execute()
+      return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
 
 # Delete a Recipe
 @router.delete("/delete_recipe/{recipe_id}", tags=["recipes"])
-async def delete_recipe():
-    pass
+async def delete_recipe(recipe_id: int):
+    try:
+        response = supabase.table("recipes").delete().eq("id", recipe_id).execute()
+        return {"message": "Recipe Deleted Successfully."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))

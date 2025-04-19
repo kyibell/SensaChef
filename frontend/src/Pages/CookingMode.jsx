@@ -52,7 +52,7 @@ function CookingMode() {
                         borderRadius: "12px",
                         boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                     }}>
-                        <h2 style={{ marginBottom: "15px", color: "#ff6b6b" }}>Cooking Instructions</h2>
+                        <h2 style={{ marginBottom: "15px", color: "#d35400" }}>Cooking Instructions</h2>
                         <RecipeStep recipeId={recipeId} />
                     </div>
 
@@ -64,7 +64,7 @@ function CookingMode() {
                         borderRadius: "12px",
                         boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
                     }}>
-                        <h2 style={{ marginBottom: "15px", color: "#ff6b6b" }}>Camera</h2>
+                        <h2 style={{ marginBottom: "15px", color: "#d35400" }}>Camera</h2>
                         <Camera />
                     </div>
                 </div>
