@@ -98,6 +98,7 @@ jobs:
         run: |
           npm install -D @playwright/test@latest
           npx playwright install --with-deps
+
       #Run frontend tests
       - name: Run Playwright tests
         working-directory: frontend
