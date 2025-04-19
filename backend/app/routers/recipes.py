@@ -106,9 +106,9 @@ async def create_recipe(user_id: UUID,
         if recipe_response:
             recipe_id =  recipe_response.data[0]["id"] # Fetch the recipe id
 
-            steps_list = steps.split("|")
+            steps_list = steps.split("|") # Slip the Steps with a Delimiter
             steps_data = []
-            for i, step in enumerate(steps_list): # Start the list at 1
+            for i, step in enumerate(steps_list): # Loop through the list
                 steps_data.append({
                     "recipe_id": recipe_id,
                     "step_number": i + 1,
@@ -131,10 +131,24 @@ async def create_recipe(user_id: UUID,
 
 # Update A Recipe
 @router.put("/update_recipe/{recipe_id}", tags=["recipes"])
-async def update_recipe():
-    pass
+async def update_recipe(recipe_id: int, recipe: Recipe):
+    try:
+      recipe_data = {
+          "recipe_name": recipe.recipe_name,
+          "image_url": recipe.recipe_image,
+          "image_tags": recipe.recipe_tags,
+          "description": recipe.recipe_description
+      }
+      response = supabase.table("recipes").update(recipe_data).eq("id", recipe_id).execute()
+      return response.data
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
 
 # Delete a Recipe
 @router.delete("/delete_recipe/{recipe_id}", tags=["recipes"])
-async def delete_recipe():
-    pass
+async def delete_recipe(recipe_id: int):
+    try:
+        response = supabase.table("recipes").delete().eq("id", recipe_id).execute()
+        return {"message": "Recipe Deleted Successfully."}
+    except Exception as error:
+        raise HTTPException(status_code=500, detail=str(error))
