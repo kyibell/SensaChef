@@ -100,7 +100,8 @@ jobs:
       #Run frontend tests
       - name: Run Playwright tests
         working-directory: frontend
-        run: npx playwright test
+        run: |
+          npx playwright test
 
       # Deploy the backend via a webhook
       - name: Deploy Frontend
