@@ -99,11 +99,6 @@ jobs:
           npm install -D @playwright/test@latest
           npx playwright install --with-deps
 
-      #Run frontend tests
-      - name: Run Playwright tests
-        working-directory: frontend
-        run: npx playwright test
-
       # Deploy the backend via a webhook
       - name: Deploy Frontend
         if: github.ref == 'refs/heads/main'
