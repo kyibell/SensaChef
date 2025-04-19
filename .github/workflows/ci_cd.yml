@@ -101,7 +101,7 @@ jobs:
       - name: Run Playwright tests
         working-directory: frontend
         run: |
-          npx playwright test
+          npx playwright test --with-deps
 
       # Deploy the backend via a webhook
       - name: Deploy Frontend
