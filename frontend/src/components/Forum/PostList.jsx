@@ -16,10 +16,10 @@ function PostList({ filter = "All" }) {
     const fetchPosts = async () => {
       try {
         // for dev
-        // const response = await fetch('http://localhost:8000/posts');
+        const response = await fetch('http://localhost:8000/posts');
 
         // for prod
-        const response = await fetch(`https://sensachef-backend.onrender.com/posts`);
+        // const response = await fetch(`https://sensachef-backend.onrender.com/posts`);
         
         if (!response.ok) throw new Error('Network response was not ok');
 

@@ -1,11 +1,25 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import './Forum.css';
+
 function CreatePost() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [imageUrl, setImageUrl] = useState('');
+    const [image, setImage] = useState(null);
     const [tags, setTags] = useState('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const navigate = useNavigate();
+
+    const handleImage = (e) => {
+        if(e.target.files && e.target.files[0]){
+            setImage(e.target.files[0]);
+        }
+    }
+
+    const handleTag = (tag) => {
+        setTags(prevTags => prevTags ? `${prevTags}, ${tag}` : tag);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,26 +28,25 @@ function CreatePost() {
 
         try {
             // const userId = localStorage.getItem("userId");
-            const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819';
-            if (!userId) throw new Error("User not authenticated");
+            const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819'; // temporary hardcoded userId
+            if (!userId) throw new Error("User not authenticated. Please log in");
 
+
+            const formData = new FormData();
+            formData.append('title', title);
+            formData.append('text', content);
+            formData.append('image', image);
+            formData.append('tags', tags.split(',').map(tag => tag.trim()));
 
             const response = await fetch(`http://localhost:8000/${userId}/create_post`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-
-                },
-                body: JSON.stringify({
-                    post_title: title,
-                    post_text: content,
-                    post_image: imageUrl,
-                    post_tags: tags.split(',').map(tag => tag.trim())
-                })
+                body: formData,
             });
 
             if(!response.ok) {
-                throw new Error(await response.text());
+                const errorData = await response.json();
+                console.log("Full error: ", errorData);
+                throw new Error(errorData.detail || "Failed to create post");
             }
 
             const data = await response.json();
@@ -49,6 +62,7 @@ function CreatePost() {
     return (
         <div className="create-post-container">
             <h2>Create a New Post</h2>
+            {error && <div>{error}</div>}
             <form onSubmit={handleSubmit}>
                 <div className="form-row">
                     <label htmlFor="title">Title:</label>
@@ -62,7 +76,7 @@ function CreatePost() {
 
                 <div className="form-row">
                     <label htmlFor="tags">Tags:</label>
-                    <input id="tags" type="text" placeholder="e.g. Tips, Cooking, Help" />
+                    <input value={tags} onChange={(e) => setTags(e.target.value)}id="tags" type="text" placeholder="e.g. Tips, Cooking, Help" />
                 </div>
 
                 <div className="tag-options">
@@ -71,8 +85,7 @@ function CreatePost() {
                             key={index}
                             className="tag-bubble"
                             onClick={() => {
-                                const input = document.getElementById("tags");
-                                input.value = input.value ? input.value + ", " + tag : tag;
+                                handleTag(tag)
                     }}
                 >
                     {tag}
@@ -83,7 +96,7 @@ function CreatePost() {
 
                 <div className="form-row">
                     <label htmlFor="image"> Image:</label>
-                    <input id="image" type="file" accept="image/*" />
+                    <input onChange={handleImage} id="image" type="file" accept="image/*" />
                 </div>
 
                 <button type="submit">Submit</button>
