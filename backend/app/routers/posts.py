@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Form, UploadFile
+from fastapi import APIRouter, HTTPException, Form, File, UploadFile
 from datetime import datetime
 from app.database import supabase, admin_supabase
 from pydantic import BaseModel, Field 
@@ -69,10 +69,10 @@ async def get_users_post(user_id: UUID):
 # Create a Post
 @router.post("/{user_id}/create_post", tags=["posts"], status_code=201) 
 async def create_post(user_id: UUID,
-                      image: UploadFile,
+                      image: UploadFile = File(None) ,
                       title: str = Form(),
                       text: str = Form(),
-                      tags: list[str] = Form(),
+                      tags: list[str] = Form([]),
                       ):
     try:
         creation_date = datetime.now().isoformat() + "Z" # Iso format is what supabase uses
@@ -80,28 +80,33 @@ async def create_post(user_id: UUID,
         db_user = supabase.table("users").select("*").eq("id", user_id) # Check for user existance
         if not db_user:
             raise HTTPException(status_code=404, detail="User not found.")
-        file_extension = image.filename.split(".")[-1] # Get the Extension of the Image
-        file_name = f"posts/{user_id}/{title}.{file_extension}" # Unique File Name for the image
-
-        img_file = await image.read() # Read the image for insertion
-
-        image_response = (
-            admin_supabase.storage.from_('post-images').upload(
-                file=img_file,
-                path=file_name,
-                file_options={'content-type': 'image/jpeg'}
-            )
-        )
-        if not image_response:
-            raise HTTPException(status_code=400, detail="Error in uploading image")
         
-        image_url = admin_supabase.storage.from_('post-images').get_public_url(file_name) # Fetch the public url
+        # process if image is provided
+        image_url = None
+        if image and image.filename:
+            file_extension = image.filename.split(".")[-1] # Get the Extension of the Image
+            file_name = f"posts/{user_id}/{title}.{file_extension}" # Unique File Name for the image
+            
+
+            img_file = await image.read() # Read the image for insertion
+
+            image_response = (
+                admin_supabase.storage.from_('post-images').upload(
+                    file=img_file,
+                    path=file_name,
+                    file_options={'content-type': 'image/jpeg'}
+                )
+            )
+            if not image_response:
+                raise HTTPException(status_code=400, detail="Error in uploading image")
+        
+            image_url = admin_supabase.storage.from_('post-images').get_public_url(file_name) # Fetch the public url
 
         post_data = { # Put the data in an object
             "created_at": creation_date, 
             "post_title": title,
             "post_text": text,
-            "post_image": image_url if image_url else None,
+            "post_image": image_url,
             "post_tags": tags,
             "user_id": str(user_id) # Convert to Str bc Supabase Can't read in the UUID Obj.
         }
