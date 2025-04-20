@@ -13,7 +13,7 @@ function CreatePost() {
 
     const handleImage = (e) => {
         if(e.target.files && e.target.files[0]){
-            setImage(e.target.files[0]);
+            setImage(e.target.files?.[0] || null);
         }
     }
 
@@ -31,12 +31,18 @@ function CreatePost() {
             const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819'; // temporary hardcoded userId
             if (!userId) throw new Error("User not authenticated. Please log in");
 
-
             const formData = new FormData();
             formData.append('title', title);
             formData.append('text', content);
-            formData.append('image', image);
-            formData.append('tags', tags.split(',').map(tag => tag.trim()));
+
+            if (image) {
+                formData.append('image', image);
+            }
+
+            if (tags) {
+                formData.append('tags', tags.split(',').map(tag => tag.trim()));
+
+            }
 
             const response = await fetch(`http://localhost:8000/${userId}/create_post`, {
                 method: 'POST',
@@ -51,7 +57,7 @@ function CreatePost() {
 
             const data = await response.json();
             console.log("post created: ", data);
-            navigate('/posts');
+            navigate('/help');
         } catch (err) {
             console.log("Error creating post: ", err);
             setError(err.message);
@@ -99,7 +105,7 @@ function CreatePost() {
                     <input onChange={handleImage} id="image" type="file" accept="image/*" />
                 </div>
 
-                <button type="submit">Submit</button>
+                <button type="submit">{loading ? 'Creating...' : 'Submit'}</button>
             </form>
         </div>
   );
