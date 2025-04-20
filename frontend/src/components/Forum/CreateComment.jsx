@@ -59,4 +59,37 @@ function CreateComment({ onCommentAdded }) {
             setLoading(false);
         }
     }
+
+    return (
+        <div className="create-comment-container">
+            <form onSubmit={handleSubmit}>
+                <textarea 
+                    value={commentText} 
+                    onChange={(e) => setCommentText(e.target.value)} 
+                    placeholder="Write your comment..."
+                    required
+                    rows={4} 
+                />
+                <div className="comment-options">
+                    <div className="rating">
+                        <label>Rating:</label>
+                        <div className="stars">
+                            {[1, 2, 3, 4, 5].map((star) => (
+                                <span 
+                                    key={star} 
+                                    className={`star ${star <= rating ? 'filled' : ''}`}
+                                    onClick={() => setRating(star)}
+                                    style={{ cursor: "pointer", fontSize: "2em" }}>
+                                    ⭐
+                                </span>
+                                
+                            ))}
+                        </div>
+                        <span>({rating}/5)</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    )
 }
+export default CreateComment;
