@@ -9,6 +9,7 @@ function CreateComment({ onCommentAdded }) {
     const [isHelpful, setIsHelpful] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
+    const [isCommenting, setIsCommenting] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -46,6 +47,7 @@ function CreateComment({ onCommentAdded }) {
             setCommentText('');
             setRating(0);
             setIsHelpful(false);
+            setIsCommenting(false);
 
             // refresh post component
             if (onCommentAdded){
@@ -60,6 +62,16 @@ function CreateComment({ onCommentAdded }) {
         }
     }
 
+    if(!isCommenting){
+        return(
+            <button
+                onClick={() => setIsCommenting(true)}
+                className="comment-button"
+            >
+                Add Comment
+            </button>
+        );
+    }
     return (
         <div className="create-comment-container">
             <form onSubmit={handleSubmit}>
@@ -98,6 +110,7 @@ function CreateComment({ onCommentAdded }) {
                     <button
                         type="button"
                         onClick={() => {
+                            setIsCommenting(false);
                             setError(null);
                         }}
                         disabled={loading}
