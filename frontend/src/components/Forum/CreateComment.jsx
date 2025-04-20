@@ -42,6 +42,11 @@ function CreateComment() {
             const data = await response.json();
             console.log("comment created: ", data);
 
+            // reset
+            setCommentText('');
+            setRating(0);
+            setIsHelpful(false);
+
         } catch (err) {
             console.log("Error creating comment: ", err);
             setError(err.message);
