@@ -2,7 +2,7 @@ import { useScroll } from "framer-motion";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
-function CreateComment() {
+function CreateComment({ onCommentAdded }) {
     const { post_id } = useParams();
     const [commentText, setCommentText] = useState('');
     const [rating, setRating] = useState(0);
@@ -46,6 +46,11 @@ function CreateComment() {
             setCommentText('');
             setRating(0);
             setIsHelpful(false);
+
+            // refresh post component
+            if (onCommentAdded){
+                onCommentAdded();
+            }
 
         } catch (err) {
             console.log("Error creating comment: ", err);
