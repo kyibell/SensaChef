@@ -1,4 +1,3 @@
-import { useScroll } from "framer-motion";
 import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 
