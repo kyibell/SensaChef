@@ -33,10 +33,10 @@ function Post({}) {
                 // Fetch comments of this post
 
                 // for dev
-                const commentsResponse = await fetch(`http://localhost:8000/${[post_id]}/comments`);
+                // const commentsResponse = await fetch(`http://localhost:8000/${[post_id]}/comments`);
 
                 // for prod
-                // const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
+                const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
 
                 if(!commentsResponse.ok){
                     throw new Error('Failed to fetch comments');
