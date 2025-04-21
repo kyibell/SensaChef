@@ -17,7 +17,7 @@ class userModel(BaseModel):
     userType: str
     
 class SignInModel(BaseModel):
-    email: str
+    username: str
     password: str
 
 # Get all Users
@@ -46,9 +46,11 @@ async def create_user(user: userModel):
 # Sign in Route
 @router.post("/sign_in", tags=["users"])
 async def sign_in(user: SignInModel):
+    result = supabase.table("users").select("email").eq("username", user.username).execute()
+    email = result.data[0]["email"]
     response = supabase.auth.sign_in_with_password(
     {
-        "email": user.email, 
+        "email": email, 
         "password": user.password,
     }
 )
