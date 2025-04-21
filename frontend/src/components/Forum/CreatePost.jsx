@@ -44,7 +44,11 @@ function CreatePost() {
 
             }
 
-            const response = await fetch(`http://localhost:8000/${userId}/create_post`, {
+            // for prod
+            const response = await fetch(`https://sensachef-backend.onrender.com/${userId}/create_post`,{
+                
+            // for dev
+            // const response = await fetch(`http://localhost:8000/${userId}/create_post`, {
                 method: 'POST',
                 body: formData,
             });

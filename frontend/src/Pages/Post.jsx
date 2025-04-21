@@ -18,10 +18,10 @@ function Post({}) {
                 // Fetch post data
                 
                 // for dev
-                const postResponse = await fetch(`http://localhost:8000/posts/${post_id}`);
+                // const postResponse = await fetch(`http://localhost:8000/posts/${post_id}`);
 
                 // for prod
-                // const postResponse = await fetch(`https://sensachef-backend.onrender.com/posts/${[post_id]}`);
+                const postResponse = await fetch(`https://sensachef-backend.onrender.com/posts/${[post_id]}`);
 
                 
                 if (!postResponse.ok){
@@ -33,7 +33,7 @@ function Post({}) {
                 // Fetch comments of this post
 
                 // for dev
-                const commentsResponse = await fetch(`http://localhost:8000/${post_id}/comments`);
+                const commentsResponse = await fetch(`http://localhost:8000/${[post_id]}/comments`);
 
                 // for prod
                 // const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
@@ -56,7 +56,11 @@ function Post({}) {
     useEffect(() => {
         if (post && comments.length > 0 && !post.is_solved) {
         
-            fetch(`http://localhost:8000/update_post/${post_id}`, {
+            // for prod
+            fetch(`https://sensachef-backend.onrender.com/update_post/${post_id}`, {
+
+            // for dev
+            // fetch(`http://localhost:8000/update_post/${post_id}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({
@@ -113,7 +117,10 @@ function Post({}) {
 
                 <div className="comments">
                     <CreateComment onCommentAdded={() => {
-                        fetch(`http://localhost:8000/${post_id}/comments`)
+                        // for prod
+                        fetch(`https://sensachef-backend.onrender.com/${post_id}/comments`)
+                        // for dev
+                        // fetch(`http://localhost:8000/${post_id}/comments`)
                             .then(res => res.json())
                             .then(data => setComments(data))
                             .catch(err => console.error(err));

@@ -20,7 +20,11 @@ function CreateComment({ onCommentAdded }) {
             const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819'; // temporary hardcoded userId
             if (!userId) throw new Error("User not authenticated. Please log in");
 
-            const response = await fetch(`http://localhost:8000/${post_id}/create_comment`, {
+            // for prod
+            const response = await fetch(`https://sensachef-backend.onrender.com/${post_id}/create_comment`, {
+
+            //for dev
+            // const response = await fetch(`http://localhost:8000/${post_id}/create_comment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
