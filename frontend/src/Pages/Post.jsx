@@ -53,6 +53,25 @@ function Post({}) {
         fetchPostAndComments();
     }, [post_id]);
 
+    useEffect(() => {
+        if (post && comments.length > 0 && !post.is_solved) {
+        
+            fetch(`http://localhost:8000/update_post/${post_id}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    is_solved: true
+                })
+            })
+            .then(res => res.json())
+            .then(updatedPost => {
+                
+                setPost(prev => ({ ...prev, ...updatedPost }));
+            })
+            .catch(err => console.error("Error marking post as solved:", err));
+        }
+    }, [comments.length, post]);
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!post) return <div>Post not found</div>;
