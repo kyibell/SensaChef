@@ -80,3 +80,8 @@ async def delete_user(user_id: str):
     response = supabase.table("users").delete().eq("user_id", user_id).execute()
     admin_supabase.auth.admin.delete_user(user_id)
     return response.data
+
+@router.get("/protected")
+async def get_user_info(payload: dict = Depends(JWTBearer())):
+    user_id = payload.get("sub")
+    return {"message": f"Welcome, user {user_id}!", "payload": payload}
