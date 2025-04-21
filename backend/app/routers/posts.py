@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Form, File, UploadFile
+from fastapi import APIRouter, HTTPException, Form, File, Body, UploadFile
 from datetime import datetime
 from app.database import supabase, admin_supabase
 from pydantic import BaseModel, Field 
@@ -14,6 +14,7 @@ class Post(BaseModel): # Model for Posts
     post_image: str = Field(..., description="The image URL of the Post")
     post_tags: list[str] = Field(..., min_length=1, description="Tags assigned to the post")
     user_id: UUID  = Field(...,description="The User ID Creating the post")
+    is_solved: bool = Field(False)
 
 
 # Get All Posts
@@ -122,12 +123,9 @@ async def create_post(user_id: UUID,
 
 # Update Post
 @router.put("/update_post/{post_id}", tags=["posts"])
-async def update_post(post_id: int, post: Post):
+async def update_post(post_id: int, update: dict = Body(...)): # Body to allow partial updates
     try:
-        post = supabase.table("posts").update({"post_title": post.post_title,
-                                           "post_text": post.post_text,
-                                           "post_image": post.post_image
-                                           }).eq("id", post_id).execute()
+        post = supabase.table("posts").update(update).eq("id", post_id).execute()
         return post.data
     except Exception as error:
         raise HTTPException(status_code=500, detail="Internal Server Error")

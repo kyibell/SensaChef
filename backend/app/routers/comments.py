@@ -76,6 +76,9 @@ async def create_comment(post_id: int, comment: Comment = Body(...)):
             "user_id": str(comment.user_id),
         }
         response = supabase.table("comments").insert(comment_data).execute()
+
+        # mark the related post as solved
+        supabase.table("posts").update({"is_solved": True}).eq("id", post_id).eq("is_solved", False).execute()
         if response:
             return response
         else: 
