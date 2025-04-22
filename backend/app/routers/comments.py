@@ -88,15 +88,15 @@ async def create_comment(post_id: int, comment: Comment = Body(...)):
 
 # Update A Comment
 @router.put('/update_comment/{comment_id}', tags=["comments"])
-async def update_comment(comment_id: int, comment: Comment):
+async def update_comment(comment_id: int, update: dict = Body(...)): # Body to allow partial updates
     try:
-        comment_data = {
-            "comment": comment.comment,
-            "rating": comment.rating,
-            "is_helpful": comment.is_helpful
-        }
+        # comment_data = {
+        #     "comment": comment.comment,
+        #     "rating": comment.rating,
+        #     "is_helpful": comment.is_helpful
+        # }
 
-        response = supabase.table("comments").update(comment_data).eq("id", comment_id).execute()
+        response = supabase.table("comments").update(update).eq("id", comment_id).execute()
         return response.data
     except Exception as error:
         raise HTTPException(status_code=500, detail="Internal Server Error")
