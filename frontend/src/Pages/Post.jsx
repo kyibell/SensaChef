@@ -104,7 +104,7 @@ function Post({}) {
     const handleMarkHelpful = async (commentId, currentStatus) => {
         try {
             const token = sessionStorage.getItem('access_token');
-            
+
             fetch(`http://localhost:8000/update_comment/${commentId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
@@ -182,7 +182,6 @@ function Post({}) {
                                 <p>{comment.comment}</p>
                                 <div className="comment-foot">
                                     <span>Rating: {comment.rating}/5</span>
-                                    <span>{comment.is_helpful ? 'Helpful' : ''}</span>
 
                                     {currentUser && post && currentUser.payload.sub === post.user_id && (
                                         <div className="helpful-toggle">

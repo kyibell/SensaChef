@@ -120,11 +120,6 @@ function CreateComment({ onCommentAdded }) {
                         </div>
                         <span>({rating}/5)</span>
                     </div>
-
-                    <label className="is-helpful">
-                        <input type="checkbox" checked={isHelpful} onChange={(e) => setIsHelpful(e.target.checked)}/>
-                        Mark as Helpful
-                    </label>
                 </div>
 
                 <div className="comment-buttons">
