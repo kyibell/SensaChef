@@ -25,7 +25,7 @@ function LoginUI() {
 
         try {
             // deployment
-            const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
+            const response = await fetch('https://sensachef-backend.onrender.com/sign_in', {    
             // development
             //  const response = await fetch('http://localhost:8000/sign_in', {
                 method: 'POST',
