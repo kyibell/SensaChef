@@ -46,9 +46,9 @@ function CreateRecipe() {
             if (!token) throw new Error("User not authenticated. Log in");
 
             // for prod
-            // const userInfoResponse = await fetch('https://sensachef-backend.onrender.com/protected', {
+            const userInfoResponse = await fetch('https://sensachef-backend.onrender.com/protected', {
             // for dev
-            const userInfoResponse = await fetch('http://localhost:8000/protected', {
+            // const userInfoResponse = await fetch('http://localhost:8000/protected', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -85,10 +85,10 @@ function CreateRecipe() {
             formData.append('steps', stepString);
 
             // for prod
-            // const response = await fetch(`https://sensachef-backend.onrender.com/${userId}/create_recipe`, {
+            const response = await fetch(`https://sensachef-backend.onrender.com/${userId}/create_recipe`, {
 
             // for dev
-            const response = await fetch(`http://localhost:8000/${userId}/create_recipe`, {
+            // const response = await fetch(`http://localhost:8000/${userId}/create_recipe`, {
                 method: 'POST',
                 body: formData,
                 headers: {
