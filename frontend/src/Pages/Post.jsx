@@ -9,6 +9,31 @@ function Post({}) {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [currentUser, setCurrentUser] = useState(null);
+
+    useEffect(() => {
+
+        const fetchCurrentUser = async () => {
+            const token = sessionStorage.getItem('access_token');
+            if (!token) throw new Error("User not authenticated. Log in");
+
+            const userInfoResponse = await fetch('http://localhost:8000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!userInfoResponse.ok){
+                throw new Error("Failed to get user info");
+            }
+
+            const userInfo = await userInfoResponse.json();
+            setCurrentUser(userInfo);
+        };
+        fetchCurrentUser();
+    }, []);
+
 
     useEffect( () => {
 
@@ -76,6 +101,25 @@ function Post({}) {
         }
     }, [comments.length, post]);
 
+    const handleMarkHelpful = async (commentId, currentStatus) => {
+        try {
+            const token = sessionStorage.getItem('access_token');
+            
+            fetch(`http://localhost:8000/update_comment/${commentId}`, {
+                method: 'PUT',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    is_helpful: !currentStatus
+                })
+            })
+            .then(res => res.json())
+            .then(setComments(prev => prev.map(comment => comment.id === commentId ? {...comment, is_helpful: !currentStatus} : comment)));
+            
+        } catch (err) {
+            console.error("Error updating comment: ", err);
+        }
+    }
+
     if (loading) return <div>Loading...</div>;
     if (error) return <div>Error: {error}</div>;
     if (!post) return <div>Post not found</div>;
@@ -130,7 +174,7 @@ function Post({}) {
 
                     {comments.length > 0 ? (
                         comments.map((comment) => (
-                            <div className="comment">
+                            <div className="comment" key={comment.id}>
                                 <div className="comment-info">
                                     <strong>By {comment.users?.username}</strong>
                                     <span>{new Date(comment.created_at).toLocaleString()}</span>
@@ -139,6 +183,23 @@ function Post({}) {
                                 <div className="comment-foot">
                                     <span>Rating: {comment.rating}/5</span>
                                     <span>{comment.is_helpful ? 'Helpful' : ''}</span>
+
+                                    {currentUser && post && currentUser.payload.sub === post.user_id && (
+                                        <div className="helpful-toggle">
+                                            <label>
+                                                <input 
+                                                    type="checkbox"
+                                                    checked={comment.is_helpful || false}
+                                                    onChange={() => handleMarkHelpful(comment.id, comment.is_helpful)}
+                                                />
+                                                Helpful?
+                                            </label>
+                                        </div>
+                                    )}
+
+                                    {comment.is_helpful && (
+                                        <span className="helpful-badge">✅ Author Marked This As Helpful</span>
+                                    )}
                                 </div>
                             </div>
                         ))
