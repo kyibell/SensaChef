@@ -35,9 +35,9 @@ function SignupUI() {
 
         try {
             // deployment
-            //const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
+            const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
             // development
-             const response = await fetch('http://localhost:8000/create_user', {
+            //  const response = await fetch('http://localhost:8000/create_user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
