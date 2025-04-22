@@ -25,9 +25,9 @@ function LoginUI() {
 
         try {
             // deployment
-            //const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
+            const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
             // development
-             const response = await fetch('http://localhost:8000/sign_in', {
+            //  const response = await fetch('http://localhost:8000/sign_in', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -42,7 +42,11 @@ function LoginUI() {
                 console.log(userData)
                 console.log(accessToken);
                 sessionStorage.setItem('access_token', accessToken);
-                const userInfo = await fetch('http://localhost:8000/protected', {
+
+                // for prod
+                const userInfo = await fetch('https://sensachef-backend.onrender.com/protected', {
+                // for dev
+                // const userInfo = await fetch('http://localhost:8000/protected', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,

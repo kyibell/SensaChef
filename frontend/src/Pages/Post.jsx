@@ -17,7 +17,8 @@ function Post({}) {
             const token = sessionStorage.getItem('access_token');
             if (!token) throw new Error("User not authenticated. Log in");
 
-            const userInfoResponse = await fetch('http://localhost:8000/protected', {
+            const userInfoResponse = await fetch('https://sensachef-backend.onrender.com/protected', {
+            // const userInfoResponse = await fetch('http://localhost:8000/protected', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
@@ -58,10 +59,10 @@ function Post({}) {
                 // Fetch comments of this post
 
                 // for dev
-                const commentsResponse = await fetch(`http://localhost:8000/${[post_id]}/comments`);
+                // const commentsResponse = await fetch(`http://localhost:8000/${[post_id]}/comments`);
 
                 // for prod
-                // const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
+                const commentsResponse = await fetch(`https://sensachef-backend.onrender.com/${[post_id]}/comments`);
 
                 if(!commentsResponse.ok){
                     throw new Error('Failed to fetch comments');
@@ -105,7 +106,11 @@ function Post({}) {
         try {
             const token = sessionStorage.getItem('access_token');
 
-            fetch(`http://localhost:8000/update_comment/${commentId}`, {
+            // for prod
+            fetch(`https://sensachef-backend.onrender.com/${commentId}`, {
+
+            // for dev
+            // fetch(`http://localhost:8000/update_comment/${commentId}`, {
                 method: 'PUT',
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({

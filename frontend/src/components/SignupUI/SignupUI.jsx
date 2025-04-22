@@ -52,7 +52,12 @@ function SignupUI() {
                 console.log(userData)
                 console.log(accessToken);
                 sessionStorage.setItem('access_token', accessToken);
-                const userInfo = await fetch('http://localhost:8000/protected', {
+
+                // for prod
+                const userInfo = await fetch('https://sensachef-backend.onrender.com/protected', {
+
+                // for dev
+                // const userInfo = await fetch('http://localhost:8000/protected', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`,

@@ -20,7 +20,10 @@ function CreateComment({ onCommentAdded }) {
             const token = sessionStorage.getItem('access_token');
             if (!token) throw new Error("User not authenticated. Log in");
 
-            const userInfoResponse = await fetch('http://localhost:8000/protected', {
+            // for prod
+            const userInfoResponse = await fetch('https://sensachef-backend.onrender.com/protected', {
+            // for dev
+            // const userInfoResponse = await fetch('http://localhost:8000/protected', {
                 method: 'GET',
                 headers: {
                     'Authorization': `Bearer ${token}`,
