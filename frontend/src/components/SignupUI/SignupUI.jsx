@@ -35,9 +35,9 @@ function SignupUI() {
 
         try {
             // deployment
-            const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
+            //const response = await fetch('https://sensachef-backend.onrender.com/create_user', {
             // development
-            // const response = await fetch('http://localhost:8000/create_user', {
+             const response = await fetch('http://localhost:8000/create_user', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -46,7 +46,27 @@ function SignupUI() {
             });
 
             if (response.ok) {
+                const userData = await response.json();
+                const accessToken = userData.session.access_token;
+                console.log(response)
+                console.log(userData)
+                console.log(accessToken);
+                sessionStorage.setItem('access_token', accessToken);
+
+                // for prod
+                const userInfo = await fetch('https://sensachef-backend.onrender.com/protected', {
+
+                // for dev
+                // const userInfo = await fetch('http://localhost:8000/protected', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`,
+                    },
+                });
+                const userInfo1 = await userInfo.json();
+                console.log(userInfo1)
                 setSignupMessage("✅ Signup successful!");
+                
             } else {
                 const error = await response.json();
 

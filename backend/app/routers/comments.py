@@ -1,11 +1,11 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Body
 from datetime import datetime
 from app.database import supabase, admin_supabase
 from pydantic import BaseModel
 from uuid import UUID
 
 class Comment(BaseModel): # Model for Comments for Validation
-    created_at: datetime
+    # created_at: datetime
     comment: str
     user_id: UUID
     rating: float
@@ -62,7 +62,7 @@ async def get_user_comment(user_id: UUID):
 
 # Create A Comment
 @router.post('/{post_id}/create_comment',tags=["comments"])
-async def create_comment(comment: Comment, user_id: UUID, post_id: int):
+async def create_comment(post_id: int, comment: Comment = Body(...)):
     try:
         creation_date = datetime.now().isoformat() + "Z"
       #  db_user = supabase.table("users").select("*").eq("id", user_id).execute()
@@ -71,13 +71,14 @@ async def create_comment(comment: Comment, user_id: UUID, post_id: int):
         
         comment_data = {
             "created_at": creation_date,
-            "comment": comment.comment,
-            "user_id": str(user_id),
             "post_id": post_id,
-            "rating": comment.rating,
-            "is_helpful": False,
+            **comment.dict(), # unpack the Pydantic model into a python dictionary
+            "user_id": str(comment.user_id),
         }
         response = supabase.table("comments").insert(comment_data).execute()
+
+        # mark the related post as solved
+        supabase.table("posts").update({"is_solved": True}).eq("id", post_id).eq("is_solved", False).execute()
         if response:
             return response
         else: 
@@ -87,15 +88,15 @@ async def create_comment(comment: Comment, user_id: UUID, post_id: int):
 
 # Update A Comment
 @router.put('/update_comment/{comment_id}', tags=["comments"])
-async def update_comment(comment_id: int, comment: Comment):
+async def update_comment(comment_id: int, update: dict = Body(...)): # Body to allow partial updates
     try:
-        comment_data = {
-            "comment": comment.comment,
-            "rating": comment.rating,
-            "is_helpful": comment.is_helpful
-        }
+        # comment_data = {
+        #     "comment": comment.comment,
+        #     "rating": comment.rating,
+        #     "is_helpful": comment.is_helpful
+        # }
 
-        response = supabase.table("comments").update(comment_data).eq("id", comment_id).execute()
+        response = supabase.table("comments").update(update).eq("id", comment_id).execute()
         return response.data
     except Exception as error:
         raise HTTPException(status_code=500, detail="Internal Server Error")
