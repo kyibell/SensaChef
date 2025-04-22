@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 function CreateComment({ onCommentAdded }) {
@@ -16,9 +16,27 @@ function CreateComment({ onCommentAdded }) {
         setError(null);
 
         try {
+
+            const token = sessionStorage.getItem('access_token');
+            if (!token) throw new Error("User not authenticated. Log in");
+
+            const userInfoResponse = await fetch('http://localhost:8000/protected', {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                },
+            });
+
+            if (!userInfoResponse.ok){
+                throw new Error("Failed to get user info");
+            }
+
+            const userInfo = await userInfoResponse.json();
+            const userId = userInfo.payload.sub;
+
             // const userId = localStorage.getItem("userId");
-            const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819'; // temporary hardcoded userId
-            if (!userId) throw new Error("User not authenticated. Please log in");
+            // const userId = '9ea35ad8-c183-4755-9594-4f7bf5d72819'; // temporary hardcoded userId
+            // if (!userId) throw new Error("User not authenticated. Please log in");
 
             // for prod
             const response = await fetch(`https://sensachef-backend.onrender.com/${post_id}/create_comment`, {
