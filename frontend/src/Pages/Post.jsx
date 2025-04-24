@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom';
 import CreateComment from '../components/Forum/CreateComment';
+import '../components/Forum/PostComment.css';
 
 function Post({}) {
 
