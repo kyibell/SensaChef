@@ -59,7 +59,7 @@ async def get_recipe_by_name(recipe_name: str):
 
 
 # Create A Recipe
-@router.post("/create_recipe", tags=["recipes"],status_code=201)
+@router.post("/{user_id}/create_recipe", tags=["recipes"],status_code=201)
 async def create_recipe(user_id: UUID, 
                         image: UploadFile,
                         title: str = Form(),
