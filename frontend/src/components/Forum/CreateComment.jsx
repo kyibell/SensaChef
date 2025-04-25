@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import './PostComment.css';
 
 function CreateComment({ onCommentAdded }) {
     const { post_id } = useParams();
