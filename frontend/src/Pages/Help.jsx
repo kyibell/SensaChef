@@ -8,7 +8,7 @@ export default function Help() {
   const [selectedTag, setSelectedTag] = useState(null);
   const navigate = useNavigate();
 
-  const tags = ["Tips", "Steps help", "Object detection"];
+  const tags = ["Tips", "Object detection", "Ingredient Identification"];
 
   return (
     <div>
@@ -125,12 +125,11 @@ function getTagColor(tag) {
   switch (tag) {
     case "Tips":
       return "#22c55e";
-    case "Steps help":
-      return "#b91c1c";
     case "Object detection":
       return "#7c3aed";
+    case "Ingredient Identification":
+      return "#0ea5e9"; // light blue
     default:
       return "#6b7280";
   }
 }
-
