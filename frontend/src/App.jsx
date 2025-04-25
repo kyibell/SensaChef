@@ -37,7 +37,7 @@ const AnimatedRoutes = () => {
         exit="exit"
       >
         <Routes location={location}>
-          <Route path="/" element={<Navigate to="/home" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/home" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
