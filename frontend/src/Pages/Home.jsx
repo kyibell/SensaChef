@@ -17,6 +17,7 @@ function Home() {
           borderRadius: "999px",
           fontWeight: "bold",
           cursor: "pointer",
+          marginTop: "30px",
         }}
       >
         + Create Recipe

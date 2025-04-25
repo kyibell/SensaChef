@@ -1,7 +1,18 @@
 import './LoginUI.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function LoginUI() {
+    const navigate = useNavigate()
+
+
+    useEffect(() => {
+        const accessToken = localStorage.getItem("access_token");
+        if (accessToken) {
+            navigate("/home");
+        }
+    }, [navigate])
+
     const [formData, setFormData] = useState({
             username: '',
             password: '',
@@ -55,6 +66,7 @@ function LoginUI() {
                 const userInfo1 = await userInfo.json();
                 console.log(userInfo1)
                 setSignupMessage("✅ Signup successful!");
+                navigate('/home');
                 
             } else {
                 const error = await response.json();
