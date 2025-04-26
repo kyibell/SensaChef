@@ -7,7 +7,16 @@ function RecipeCard({ recipe }) {
   return (
     <div className="recipe-card" onClick={() => navigate(`/recipe/${recipe.id}`)}>
       <img src={`/images/${recipe.image}`} alt={recipe.title} />
-      <h3>{recipe.title}</h3>
+      <div className="card-body">
+        <h3 className="recipe-title">{recipe.title}</h3>
+        <p className="recipe-descirption">
+          {recipe.descirption || "No description available."}
+        </p>
+      </div>
+      
+      <div className="card-footer">
+        <button className="cook-now-btn">Cook Now</button>
+      </div>
     </div>
   );
 }
